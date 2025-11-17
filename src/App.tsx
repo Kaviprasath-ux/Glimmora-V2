@@ -14,6 +14,7 @@ import { BookingPayment } from './pages/Booking/BookingPayment';
 import { BookingConfirmation } from './pages/Booking/BookingConfirmation';
 import { BookingFailed } from './pages/Booking/BookingFailed';
 import { PreCheckInPage } from './pages/PreCheckIn/PreCheckInPage';
+import { DashboardPage } from './pages/Dashboard/DashboardPage';
 import { NotFound } from './pages/NotFound/NotFound';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { AuthLayout } from './components/layout/AuthLayout';
@@ -39,6 +40,9 @@ function App() {
 
             {/* Pre-Check-In route */}
             <Route path="/pre-checkin" element={<PreCheckInPage />} />
+
+            {/* Dashboard route */}
+            <Route path="/dashboard" element={<DashboardPage />} />
 
             {/* Booking flow routes */}
             <Route path="/booking" element={<BookingPage />} />
