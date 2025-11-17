@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Hotel, Mail, Phone, MapPin } from 'lucide-react';
-import { APP_NAME, APP_VERSION } from '@/config/constants';
+import { Hotel, Mail, Phone, MapPin, Instagram, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { APP_NAME, APP_VERSION, APP_TAGLINE, CONTACT_INFO } from '@/config/constants';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,27 +11,74 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-2 text-white mb-4">
+            <div className="flex items-center gap-2 text-white mb-2">
               <Hotel size={28} />
               <span className="text-xl font-serif font-bold">{APP_NAME}</span>
             </div>
-            <p className="text-neutral-400 mb-4">
-              Experience luxury and comfort at {APP_NAME}. Your perfect stay
-              awaits.
+            <p className="text-primary-300 text-sm mb-4 italic">{APP_TAGLINE}</p>
+            <p className="text-neutral-400 mb-4 text-sm">
+              Experience the perfect balance of modern luxury and natural tranquility
+              along the California coast.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
-                <MapPin size={16} />
-                <span>123 Hotel Street, City, Country</span>
+                <MapPin size={16} className="text-primary-400 flex-shrink-0" />
+                <span>
+                  {CONTACT_INFO.address.street}, {CONTACT_INFO.address.city}, {CONTACT_INFO.address.state} {CONTACT_INFO.address.zip}
+                </span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={16} />
-                <span>+1 (555) 123-4567</span>
+                <Phone size={16} className="text-primary-400 flex-shrink-0" />
+                <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-white transition-colors">
+                  {CONTACT_INFO.phone}
+                </a>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={16} />
-                <span>info@glimmorahotel.com</span>
+                <Mail size={16} className="text-primary-400 flex-shrink-0" />
+                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
+                  {CONTACT_INFO.email}
+                </a>
               </div>
+            </div>
+
+            {/* Social Media */}
+            <div className="flex gap-4 mt-6">
+              <a
+                href={CONTACT_INFO.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-400 hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram size={20} />
+              </a>
+              <a
+                href={CONTACT_INFO.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-400 hover:text-white transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook size={20} />
+              </a>
+              <a
+                href={`https://twitter.com/${CONTACT_INFO.social.twitter.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-400 hover:text-white transition-colors"
+                aria-label="Twitter"
+              >
+                <Twitter size={20} />
+              </a>
+              <a
+                href={CONTACT_INFO.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-400 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={20} />
+              </a>
             </div>
           </div>
 

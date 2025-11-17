@@ -5,6 +5,7 @@ import { Login } from './pages/Auth/Login';
 import { SignUp } from './pages/Auth/SignUp';
 import { RoomsPage } from './pages/Rooms/RoomsPage';
 import { RoomDetailPage } from './pages/Rooms/RoomDetailPage';
+import { ContactPage } from './pages/Contact/ContactPage';
 import { BookingReview } from './pages/Booking/BookingReview';
 import { BookingPayment } from './pages/Booking/BookingPayment';
 import { BookingConfirmation } from './pages/Booking/BookingConfirmation';
@@ -26,6 +27,9 @@ function App() {
           {/* Rooms routes */}
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/rooms/:slug" element={<RoomDetailPage />} />
+
+          {/* Contact route */}
+          <Route path="/contact" element={<ContactPage />} />
 
           {/* Booking flow routes */}
           <Route path="/booking/review" element={<BookingReview />} />
