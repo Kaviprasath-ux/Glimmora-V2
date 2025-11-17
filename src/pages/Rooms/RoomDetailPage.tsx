@@ -18,12 +18,10 @@ import {
 import { getRoomBySlug } from '@/data/roomsData';
 import { Button, Card } from '@/components/ui';
 import { formatCurrency } from '@/utils/helpers/format';
-import { useBookingStore } from '@/stores/bookingStore';
 
 export const RoomDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { startBooking } = useBookingStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState(0);
@@ -47,20 +45,8 @@ export const RoomDetailPage = () => {
   }
 
   const handleBookNow = () => {
-    // Initialize booking with default dates (today + 1 day check-in, +2 days check-out)
-    const checkIn = new Date();
-    checkIn.setDate(checkIn.getDate() + 1);
-    const checkOut = new Date();
-    checkOut.setDate(checkOut.getDate() + 3);
-
-    startBooking(
-      room,
-      checkIn,
-      checkOut,
-      { adults: 2, children: 0, infants: 0 }
-    );
-
-    navigate('/booking/review');
+    // Navigate to booking page with room slug
+    navigate(`/booking?room=${room.slug}`);
   };
 
   const openLightbox = (index: number) => {

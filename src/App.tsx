@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { BookingProvider } from './contexts/BookingContext';
 import { HomePage } from './pages/Home';
 import { Login } from './pages/Auth/Login';
 import { SignUp } from './pages/Auth/SignUp';
 import { RoomsPage } from './pages/Rooms/RoomsPage';
 import { RoomDetailPage } from './pages/Rooms/RoomDetailPage';
 import { ContactPage } from './pages/Contact/ContactPage';
+import { BookingPage } from './pages/Booking/BookingPage';
 import { BookingReview } from './pages/Booking/BookingReview';
 import { BookingPayment } from './pages/Booking/BookingPayment';
 import { BookingConfirmation } from './pages/Booking/BookingConfirmation';
@@ -17,9 +19,10 @@ import { GuestRoute } from './routes/guards/GuestRoute';
 
 function App() {
   return (
-    <Router>
-      <Toaster position="top-right" />
-      <Routes>
+    <BookingProvider>
+      <Router>
+        <Toaster position="top-right" />
+        <Routes>
         {/* Public routes with navbar/footer */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
@@ -32,6 +35,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
 
           {/* Booking flow routes */}
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/booking/review" element={<BookingReview />} />
           <Route path="/booking/payment" element={<BookingPayment />} />
           <Route path="/booking/confirmation" element={<BookingConfirmation />} />
@@ -49,7 +53,8 @@ function App() {
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
+      </Router>
+    </BookingProvider>
   );
 }
 
