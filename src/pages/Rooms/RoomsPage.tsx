@@ -1,10 +1,9 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Users,
   Maximize2,
-  Eye,
   Star,
   Grid3x3,
   List,
@@ -13,12 +12,14 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight
+  ChevronsRight,
+  CheckCircle
 } from 'lucide-react';
 import { rooms } from '@/data/roomsData';
 import { Button, Card } from '@/components/ui';
 import { formatCurrency } from '@/utils/helpers/format';
 import type { Room } from '@/api/types/booking.types';
+import { RoomsSearchWidget, SearchData } from '@/components/rooms/RoomsSearchWidget';
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'price-low' | 'price-high' | 'rating' | 'popularity';
@@ -26,16 +27,24 @@ type SortOption = 'price-low' | 'price-high' | 'rating' | 'popularity';
 export const RoomsPage = () => {
   const navigate = useNavigate();
   const resultsRef = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
 
   // View and filter state
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
+  // Search data from widget
+  const [searchData, setSearchData] = useState<SearchData>({
+    checkIn: searchParams.get('checkIn') || '',
+    checkOut: searchParams.get('checkOut') || '',
+    adults: parseInt(searchParams.get('adults') || '1'),
+    children: parseInt(searchParams.get('children') || '0'),
+  });
+
   // Filter state
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [guestCount, setGuestCount] = useState<number>(1);
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
 
   // Pagination state
@@ -53,9 +62,31 @@ export const RoomsPage = () => {
 
   const categories = ['standard', 'deluxe', 'suite', 'presidential'];
 
+  // Calculate nights for availability check
+  const nights = useMemo(() => {
+    if (!searchData.checkIn || !searchData.checkOut) return 0;
+    const checkIn = new Date(searchData.checkIn);
+    const checkOut = new Date(searchData.checkOut);
+    return Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+  }, [searchData.checkIn, searchData.checkOut]);
+
+  // Check if room is available (mock logic - in real app would check database)
+  const isRoomAvailable = (room: Room) => {
+    // If no dates selected, show all rooms
+    if (!searchData.checkIn || !searchData.checkOut) return true;
+
+    // Mock availability logic: 80% of rooms are available for any given date
+    // In production, this would check against actual bookings
+    const roomHash = room.id.charCodeAt(0) + searchData.checkIn.charCodeAt(0);
+    return roomHash % 5 !== 0; // 80% availability rate
+  };
+
   // Filter and sort rooms
   const filteredAndSortedRooms = useMemo(() => {
     let filtered = rooms.filter((room) => {
+      // Availability filter (most important!)
+      if (!isRoomAvailable(room)) return false;
+
       // Price range filter
       if (room.price < priceRange[0] || room.price > priceRange[1]) return false;
 
@@ -65,7 +96,8 @@ export const RoomsPage = () => {
       }
 
       // Guest count filter
-      if (room.maxGuests < guestCount) return false;
+      const totalGuests = searchData.adults + searchData.children;
+      if (room.maxGuests < totalGuests) return false;
 
       // Amenities filter
       if (selectedAmenities.length > 0) {
@@ -95,7 +127,7 @@ export const RoomsPage = () => {
     });
 
     return filtered;
-  }, [priceRange, selectedCategories, selectedAmenities, guestCount, sortBy]);
+  }, [priceRange, selectedCategories, selectedAmenities, searchData, sortBy]);
 
   // Pagination calculations
   const totalPages = Math.ceil(filteredAndSortedRooms.length / itemsPerPage);
@@ -106,12 +138,16 @@ export const RoomsPage = () => {
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [priceRange, selectedCategories, selectedAmenities, guestCount, sortBy, itemsPerPage]);
+  }, [priceRange, selectedCategories, selectedAmenities, searchData, sortBy, itemsPerPage]);
 
   // Scroll to results when page changes
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleSearch = (data: SearchData) => {
+    setSearchData(data);
   };
 
   const toggleCategory = (category: string) => {
@@ -134,7 +170,6 @@ export const RoomsPage = () => {
     setPriceRange([0, 1000]);
     setSelectedCategories([]);
     setSelectedAmenities([]);
-    setGuestCount(1);
   };
 
   const getCategoryBadgeColor = (category?: string) => {
@@ -191,6 +226,8 @@ export const RoomsPage = () => {
     return pages;
   };
 
+  const hasSearchDates = searchData.checkIn && searchData.checkOut;
+
   return (
     <div className="min-h-screen bg-neutral-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -198,13 +235,19 @@ export const RoomsPage = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <h1 className="text-4xl font-bold text-neutral-900 mb-3">Our Rooms & Suites</h1>
+          <h1 className="text-4xl font-bold text-neutral-900 mb-3">Available Suites</h1>
           <p className="text-lg text-neutral-600">
-            Discover the perfect accommodation for your stay at TERRA Suites
+            {filteredAndSortedRooms.length} {filteredAndSortedRooms.length === 1 ? 'room' : 'rooms'} available
+            {hasSearchDates && nights > 0 && ` for ${nights} ${nights === 1 ? 'night' : 'nights'}`}
           </p>
         </motion.div>
+
+        {/* Search Widget */}
+        <div className="mb-6">
+          <RoomsSearchWidget onSearch={handleSearch} />
+        </div>
 
         {/* Controls Bar */}
         <div ref={resultsRef} className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
@@ -315,24 +358,6 @@ export const RoomsPage = () => {
                 </div>
               </div>
 
-              {/* Guest Count */}
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Number of Guests
-                </label>
-                <select
-                  value={guestCount}
-                  onChange={(e) => setGuestCount(Number(e.target.value))}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                >
-                  {[1, 2, 3, 4, 5, 6].map(count => (
-                    <option key={count} value={count}>
-                      {count} {count === 1 ? 'Guest' : 'Guests'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Categories */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-3">
@@ -423,6 +448,8 @@ export const RoomsPage = () => {
               room={room}
               viewMode={viewMode}
               index={index}
+              searchData={searchData}
+              nights={nights}
               navigate={navigate}
               getCategoryBadgeColor={getCategoryBadgeColor}
             />
@@ -543,11 +570,26 @@ interface RoomCardProps {
   room: Room;
   viewMode: ViewMode;
   index: number;
+  searchData: SearchData;
+  nights: number;
   navigate: (path: string) => void;
   getCategoryBadgeColor: (category?: string) => string;
 }
 
-const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: RoomCardProps) => {
+const RoomCard = ({ room, viewMode, index, searchData, nights, navigate, getCategoryBadgeColor }: RoomCardProps) => {
+  const totalPrice = nights > 0 ? room.price * nights : room.price;
+  const hasSearchDates = searchData.checkIn && searchData.checkOut;
+
+  const handleClick = () => {
+    // Pass search params to room detail
+    const params = new URLSearchParams();
+    if (searchData.checkIn) params.set('checkIn', searchData.checkIn);
+    if (searchData.checkOut) params.set('checkOut', searchData.checkOut);
+    params.set('adults', searchData.adults.toString());
+    params.set('children', searchData.children.toString());
+    navigate(`/rooms/${room.slug}?${params.toString()}`);
+  };
+
   if (viewMode === 'list') {
     return (
       <motion.div
@@ -558,7 +600,7 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
         <Card
           padding="none"
           className="overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
-          onClick={() => navigate(`/rooms/${room.slug}`)}
+          onClick={handleClick}
         >
           <div className="flex flex-col sm:flex-row">
             {/* Image */}
@@ -571,6 +613,12 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
               {room.category && (
                 <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold capitalize ${getCategoryBadgeColor(room.category)}`}>
                   {room.category}
+                </div>
+              )}
+              {hasSearchDates && (
+                <div className="absolute top-4 right-4 px-3 py-1.5 bg-green-500 text-white rounded-full shadow-lg flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="text-sm font-semibold">Available</span>
                 </div>
               )}
             </div>
@@ -616,11 +664,19 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
                   <Maximize2 size={16} />
                   <span>{room.size} sq ft</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Eye size={16} />
-                  <span>{room.view}</span>
-                </div>
               </div>
+
+              {/* Total Price Info */}
+              {hasSearchDates && nights > 0 && (
+                <div className="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+                  <div className="text-sm text-primary-700">
+                    Total for {nights} {nights === 1 ? 'night' : 'nights'}
+                  </div>
+                  <div className="text-2xl font-bold text-primary-900">
+                    ${totalPrice.toFixed(0)}
+                  </div>
+                </div>
+              )}
 
               {/* Features Tags */}
               {room.features && room.features.length > 0 && (
@@ -652,7 +708,7 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
       <Card
         padding="none"
         className="overflow-hidden hover:shadow-xl transition-shadow cursor-pointer h-full flex flex-col"
-        onClick={() => navigate(`/rooms/${room.slug}`)}
+        onClick={handleClick}
       >
         {/* Room Image */}
         <div className="relative h-64 overflow-hidden">
@@ -669,6 +725,12 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
           {room.category && (
             <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold capitalize ${getCategoryBadgeColor(room.category)}`}>
               {room.category}
+            </div>
+          )}
+          {hasSearchDates && (
+            <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-green-500 text-white rounded-full shadow-lg flex items-center gap-1.5">
+              <CheckCircle className="w-4 h-4" />
+              <span className="text-xs font-semibold">Available</span>
             </div>
           )}
         </div>
@@ -708,6 +770,18 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
             </div>
           </div>
 
+          {/* Total Price Info */}
+          {hasSearchDates && nights > 0 && (
+            <div className="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+              <div className="text-xs text-primary-700">
+                Total for {nights} {nights === 1 ? 'night' : 'nights'}
+              </div>
+              <div className="text-xl font-bold text-primary-900">
+                ${totalPrice.toFixed(0)}
+              </div>
+            </div>
+          )}
+
           {/* Features/Amenities Preview */}
           <div className="flex flex-wrap gap-2 mb-4">
             {(room.features || room.amenities.slice(0, 3)).slice(0, 3).map((item) => (
@@ -731,7 +805,7 @@ const RoomCard = ({ room, viewMode, index, navigate, getCategoryBadgeColor }: Ro
             fullWidth
             onClick={(e) => {
               e.stopPropagation();
-              navigate(`/rooms/${room.slug}`);
+              handleClick();
             }}
           >
             View Details

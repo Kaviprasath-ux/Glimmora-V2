@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useState, useEffect } from 'react';
-import { Send, Bot, User as UserIcon, Sparkles } from 'lucide-react';
+import { Send, Bot, User as UserIcon } from 'lucide-react';
 
 const demoMessages = [
   { type: 'user', text: 'I need a room with a great view for my anniversary' },

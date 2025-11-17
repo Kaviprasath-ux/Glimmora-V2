@@ -23,16 +23,35 @@ export function BookingPage() {
   const { bookingData, updateBookingData } = useBooking();
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Get room from URL
+  // Get room and search params from URL
   useEffect(() => {
     const roomSlug = searchParams.get('room');
+    const checkIn = searchParams.get('checkIn');
+    const checkOut = searchParams.get('checkOut');
+    const adults = searchParams.get('adults');
+    const children = searchParams.get('children');
+
+    // Update room if not already set
     if (roomSlug && !bookingData.room) {
       const room = rooms.find(r => r.slug === roomSlug);
       if (room) {
         updateBookingData({ room });
       } else {
         navigate('/rooms');
+        return;
       }
+    }
+
+    // Update dates and guests if available in URL
+    if (checkIn && checkOut) {
+      updateBookingData({
+        checkIn,
+        checkOut,
+        guests: {
+          adults: adults ? parseInt(adults) : 1,
+          children: children ? parseInt(children) : 0,
+        },
+      });
     }
   }, [searchParams, bookingData.room, updateBookingData, navigate]);
 
@@ -53,7 +72,7 @@ export function BookingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => currentStep === 1 ? navigate(`/rooms/${bookingData.room.slug}`) : setCurrentStep(currentStep - 1)}
+              onClick={() => currentStep === 1 ? navigate(`/rooms/${bookingData.room!.slug}`) : setCurrentStep(currentStep - 1)}
               className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />

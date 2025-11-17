@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -22,6 +22,7 @@ import { formatCurrency } from '@/utils/helpers/format';
 export const RoomDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState(0);
@@ -45,8 +46,14 @@ export const RoomDetailPage = () => {
   }
 
   const handleBookNow = () => {
-    // Navigate to booking page with room slug
-    navigate(`/booking?room=${room.slug}`);
+    // Navigate to booking page with room slug and search params
+    const params = new URLSearchParams();
+    params.set('room', room.slug);
+    if (searchParams.get('checkIn')) params.set('checkIn', searchParams.get('checkIn')!);
+    if (searchParams.get('checkOut')) params.set('checkOut', searchParams.get('checkOut')!);
+    params.set('adults', searchParams.get('adults') || '1');
+    params.set('children', searchParams.get('children') || '0');
+    navigate(`/booking?${params.toString()}`);
   };
 
   const openLightbox = (index: number) => {
