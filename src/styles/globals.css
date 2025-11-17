@@ -22,9 +22,9 @@
     @apply outline-none ring-2 ring-primary-500 ring-offset-2;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - TERRA Suites branding */
   ::-webkit-scrollbar {
-    @apply w-2 h-2;
+    @apply w-3;
   }
 
   ::-webkit-scrollbar-track {
@@ -32,11 +32,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-neutral-300 rounded-full;
+    @apply bg-primary-400 rounded-lg;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-neutral-400;
+    @apply bg-primary-600;
   }
 
   /* Reduced motion support */
