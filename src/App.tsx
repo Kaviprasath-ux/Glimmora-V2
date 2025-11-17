@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { BookingProvider } from './contexts/BookingContext';
+import { PreCheckInProvider } from './contexts/PreCheckInContext';
 import { HomePage } from './pages/Home';
 import { Login } from './pages/Auth/Login';
 import { SignUp } from './pages/Auth/SignUp';
@@ -12,6 +13,7 @@ import { BookingReview } from './pages/Booking/BookingReview';
 import { BookingPayment } from './pages/Booking/BookingPayment';
 import { BookingConfirmation } from './pages/Booking/BookingConfirmation';
 import { BookingFailed } from './pages/Booking/BookingFailed';
+import { PreCheckInPage } from './pages/PreCheckIn/PreCheckInPage';
 import { NotFound } from './pages/NotFound/NotFound';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { AuthLayout } from './components/layout/AuthLayout';
@@ -19,28 +21,32 @@ import { GuestRoute } from './routes/guards/GuestRoute';
 
 function App() {
   return (
-    <BookingProvider>
-      <Router>
-        <Toaster position="top-right" />
-        <Routes>
-        {/* Public routes with navbar/footer */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<HomePage />} />
+    <PreCheckInProvider>
+      <BookingProvider>
+        <Router>
+          <Toaster position="top-right" />
+          <Routes>
+          {/* Public routes with navbar/footer */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<HomePage />} />
 
-          {/* Rooms routes */}
-          <Route path="/rooms" element={<RoomsPage />} />
-          <Route path="/rooms/:slug" element={<RoomDetailPage />} />
+            {/* Rooms routes */}
+            <Route path="/rooms" element={<RoomsPage />} />
+            <Route path="/rooms/:slug" element={<RoomDetailPage />} />
 
-          {/* Contact route */}
-          <Route path="/contact" element={<ContactPage />} />
+            {/* Contact route */}
+            <Route path="/contact" element={<ContactPage />} />
 
-          {/* Booking flow routes */}
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/booking/review" element={<BookingReview />} />
-          <Route path="/booking/payment" element={<BookingPayment />} />
-          <Route path="/booking/confirmation" element={<BookingConfirmation />} />
-          <Route path="/booking/failed" element={<BookingFailed />} />
-        </Route>
+            {/* Pre-Check-In route */}
+            <Route path="/pre-checkin" element={<PreCheckInPage />} />
+
+            {/* Booking flow routes */}
+            <Route path="/booking" element={<BookingPage />} />
+            <Route path="/booking/review" element={<BookingReview />} />
+            <Route path="/booking/payment" element={<BookingPayment />} />
+            <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+            <Route path="/booking/failed" element={<BookingFailed />} />
+          </Route>
 
         {/* Auth routes (guest only) */}
         <Route element={<AuthLayout />}>
@@ -50,11 +56,12 @@ function App() {
           </Route>
         </Route>
 
-        {/* 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      </Router>
-    </BookingProvider>
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        </Router>
+      </BookingProvider>
+    </PreCheckInProvider>
   );
 }
 
