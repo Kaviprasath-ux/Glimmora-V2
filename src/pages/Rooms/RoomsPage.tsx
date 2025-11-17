@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -9,7 +9,11 @@ import {
   Grid3x3,
   List,
   SlidersHorizontal,
-  X
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 import { rooms } from '@/data/roomsData';
 import { Button, Card } from '@/components/ui';
@@ -21,6 +25,7 @@ type SortOption = 'price-low' | 'price-high' | 'rating' | 'popularity';
 
 export const RoomsPage = () => {
   const navigate = useNavigate();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   // View and filter state
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -32,6 +37,10 @@ export const RoomsPage = () => {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [guestCount, setGuestCount] = useState<number>(1);
   const [sortBy, setSortBy] = useState<SortOption>('popularity');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   // Get unique amenities and categories from all rooms
   const allAmenities = useMemo(() => {
@@ -88,6 +97,23 @@ export const RoomsPage = () => {
     return filtered;
   }, [priceRange, selectedCategories, selectedAmenities, guestCount, sortBy]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredAndSortedRooms.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedRooms = filteredAndSortedRooms.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [priceRange, selectedCategories, selectedAmenities, guestCount, sortBy, itemsPerPage]);
+
+  // Scroll to results when page changes
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev =>
       prev.includes(category)
@@ -126,6 +152,45 @@ export const RoomsPage = () => {
     }
   };
 
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first page
+      pages.push(1);
+
+      if (currentPage > 3) {
+        pages.push('...');
+      }
+
+      // Show pages around current page
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+
+      // Always show last page
+      if (totalPages > 1) {
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -142,7 +207,7 @@ export const RoomsPage = () => {
         </motion.div>
 
         {/* Controls Bar */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <div ref={resultsRef} className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
           {/* Left side - Filter toggle and results count */}
           <div className="flex items-center gap-4">
             <Button
@@ -162,8 +227,19 @@ export const RoomsPage = () => {
             </span>
           </div>
 
-          {/* Right side - Sort and View mode */}
-          <div className="flex items-center gap-3">
+          {/* Right side - Sort, Items per page, and View mode */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <select
+              value={itemsPerPage}
+              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              className="px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value={6}>6 per page</option>
+              <option value={9}>9 per page</option>
+              <option value={12}>12 per page</option>
+              <option value={24}>24 per page</option>
+            </select>
+
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
@@ -332,9 +408,16 @@ export const RoomsPage = () => {
           </div>
         )}
 
+        {/* Pagination Info */}
+        {filteredAndSortedRooms.length > 0 && (
+          <div className="mb-4 text-sm text-neutral-600">
+            Showing {startIndex + 1}-{Math.min(endIndex, filteredAndSortedRooms.length)} of {filteredAndSortedRooms.length} rooms
+          </div>
+        )}
+
         {/* Room Grid/List */}
         <div className={viewMode === 'grid' ? 'grid md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}>
-          {filteredAndSortedRooms.map((room, index) => (
+          {paginatedRooms.map((room, index) => (
             <RoomCard
               key={room.id}
               room={room}
@@ -359,6 +442,95 @@ export const RoomsPage = () => {
             <Button variant="primary" onClick={clearFilters}>
               Clear Filters
             </Button>
+          </motion.div>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4"
+          >
+            {/* Page info for mobile */}
+            <div className="text-sm text-neutral-600 sm:hidden">
+              Page {currentPage} of {totalPages}
+            </div>
+
+            {/* Pagination buttons */}
+            <div className="flex items-center gap-2">
+              {/* First page */}
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="p-2"
+              >
+                <ChevronsLeft size={18} />
+              </Button>
+
+              {/* Previous page */}
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2"
+              >
+                <ChevronLeft size={18} />
+              </Button>
+
+              {/* Page numbers */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((page, index) => (
+                  page === '...' ? (
+                    <span key={`ellipsis-${index}`} className="px-3 py-2 text-neutral-400">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page as number)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        currentPage === page
+                          ? 'bg-primary-600 text-white'
+                          : 'bg-white text-neutral-700 hover:bg-neutral-100 border border-neutral-300'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                ))}
+              </div>
+
+              {/* Next page */}
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2"
+              >
+                <ChevronRight size={18} />
+              </Button>
+
+              {/* Last page */}
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="p-2"
+              >
+                <ChevronsRight size={18} />
+              </Button>
+            </div>
+
+            {/* Page info for desktop */}
+            <div className="hidden sm:block text-sm text-neutral-600">
+              Page {currentPage} of {totalPages}
+            </div>
           </motion.div>
         )}
       </div>
