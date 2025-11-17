@@ -40,6 +40,42 @@ export const createBookingSchema = z.object({
   specialRequests: z.string().max(500).optional(),
 });
 
+export const guestInfoSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must be less than 50 characters'),
+  lastName: z
+    .string()
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must be less than 50 characters'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
+  country: z.string().min(2, 'Please select a country'),
+  specialRequests: z
+    .string()
+    .max(500, 'Special requests must be less than 500 characters')
+    .optional(),
+});
+
+export const paymentInfoSchema = z.object({
+  cardNumber: z
+    .string()
+    .regex(/^\d{16}$/, 'Card number must be 16 digits')
+    .transform((val) => val.replace(/\s/g, '')),
+  cardHolder: z
+    .string()
+    .min(3, 'Card holder name is required')
+    .max(50, 'Card holder name must be less than 50 characters'),
+  expiryDate: z
+    .string()
+    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, 'Expiry date must be in MM/YY format'),
+  cvv: z.string().regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits'),
+  saveCard: z.boolean().optional().default(false),
+});
+
 // Type exports
 export type BookingWidgetFormData = z.infer<typeof bookingWidgetSchema>;
 export type CreateBookingFormData = z.infer<typeof createBookingSchema>;
+export type GuestInfoFormData = z.infer<typeof guestInfoSchema>;
+export type PaymentInfoFormData = z.infer<typeof paymentInfoSchema>;
