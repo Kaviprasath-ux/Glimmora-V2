@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
+import { ChatProvider } from './contexts/ChatContext';
 import { BookingProvider } from './contexts/BookingContext';
 import { PreCheckInProvider } from './contexts/PreCheckInContext';
+import { ChatWidget } from './components/chatbot/ChatWidget';
 import { HomePage } from './pages/Home';
 import { LoginPage } from './pages/Auth/LoginPage';
 import { SignupPage } from './pages/Auth/SignupPage';
@@ -25,10 +27,12 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <PreCheckInProvider>
-          <BookingProvider>
-            <Toaster position="top-right" />
-            <Routes>
+        <ChatProvider>
+          <PreCheckInProvider>
+            <BookingProvider>
+              <Toaster position="top-right" />
+              <ChatWidget />
+              <Routes>
               {/* Public routes with navbar/footer */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />
@@ -78,6 +82,7 @@ function App() {
             </Routes>
           </BookingProvider>
         </PreCheckInProvider>
+        </ChatProvider>
       </AuthProvider>
     </Router>
   );
