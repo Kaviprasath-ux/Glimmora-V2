@@ -3,6 +3,7 @@ export interface Room {
   name: string;
   slug: string;
   description: string;
+  shortDescription?: string;
   price: number;
   images: string[];
   amenities: string[];
@@ -10,6 +11,11 @@ export interface Room {
   bedType: string;
   size: number;
   view: string;
+  category?: 'standard' | 'deluxe' | 'suite' | 'presidential';
+  features?: string[];
+  rating?: number;
+  reviewCount?: number;
+  available?: boolean;
 }
 
 export interface BookingDraft {
