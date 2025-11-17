@@ -10,10 +10,10 @@ export default {
         primary: {
           50: '#FAF8F6',
           100: '#F5F1EE',
-          200: '#E8E4E0',
-          300: '#D1CCC7',
-          400: '#C8A896',
-          500: '#A57865',
+          200: '#E8DED2',
+          300: '#D4C4B4',
+          400: '#BFA793',
+          500: '#A57865',  // TERRA Suites brand color
           600: '#8B6450',
           700: '#6B4D3D',
           800: '#4A342A',

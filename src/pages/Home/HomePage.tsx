@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, MapPin, Calendar } from 'lucide-react';
 import { Button, Card } from '@/components/ui';
-import { ROUTES, APP_NAME } from '@/config/constants';
+import { ROUTES, APP_NAME, APP_TAGLINE } from '@/config/constants';
 
 export const HomePage = () => {
   return (
@@ -11,11 +11,11 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-6xl font-serif font-bold text-neutral-900 mb-6">
-              Welcome to {APP_NAME}
+              {APP_TAGLINE}
             </h1>
             <p className="text-xl text-neutral-700 mb-8">
-              Experience luxury, comfort, and unforgettable moments at our
-              exquisite hotel. Your perfect stay begins here.
+              Experience the perfect balance of modern design and natural beauty.
+              Thoughtfully crafted spaces for mindful travelers seeking authentic luxury.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={ROUTES.ROOMS}>
@@ -53,11 +53,11 @@ export const HomePage = () => {
                   <Star size={32} className="text-primary-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-                  Luxury Rooms
+                  Thoughtfully Designed Spaces
                 </h3>
                 <p className="text-neutral-600">
-                  Spacious and elegantly designed rooms with premium amenities
-                  for your comfort
+                  Every suite blends modern comfort with natural elements,
+                  creating a serene sanctuary for your stay
                 </p>
               </div>
             </Card>
@@ -99,11 +99,11 @@ export const HomePage = () => {
       <section className="py-16 bg-primary-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Ready to Book Your Stay?
+            Your Journey Begins Here
           </h2>
           <p className="text-primary-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied guests who have experienced the luxury
-            and comfort of {APP_NAME}
+            Discover a place where modern luxury meets natural tranquility.
+            Welcome to {APP_NAME}.
           </p>
           <Link to={ROUTES.ROOMS}>
             <Button
