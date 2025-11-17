@@ -11,8 +11,7 @@ export function StaffTab() {
   const filteredStaff = staff.filter((member) => {
     const matchesSearch =
       member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.department.toLowerCase().includes(searchTerm.toLowerCase());
+      member.role.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
 
@@ -100,7 +99,7 @@ export function StaffTab() {
                 <Briefcase className="w-4 h-4 text-neutral-400" />
                 <div>
                   <p className="font-semibold text-neutral-900">{member.role}</p>
-                  <p className="text-xs text-neutral-500">{member.department}</p>
+                  <p className="text-xs text-neutral-500 capitalize">{member.shift} shift</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm text-neutral-600">

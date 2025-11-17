@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { X, User, Mail, Phone, MapPin, Star, Calendar, DollarSign } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAdmin } from '@/contexts/AdminContext';

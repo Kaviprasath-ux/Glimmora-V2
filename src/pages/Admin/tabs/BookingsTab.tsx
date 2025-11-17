@@ -6,7 +6,6 @@ import {
   Search,
   Download,
   Plus,
-  Eye,
   Edit,
   Trash2,
   ChevronLeft,
@@ -20,7 +19,7 @@ export function BookingsTab() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
 
   const itemsPerPage = 10;

@@ -12,7 +12,7 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ isOpen, onClose, booking, mode }: BookingModalProps) {
-  const { addBooking, updateBooking, rooms, guests } = useAdmin();
+  const { addBooking, updateBooking, rooms } = useAdmin();
 
   const [formData, setFormData] = useState({
     guestName: booking?.guestName || '',

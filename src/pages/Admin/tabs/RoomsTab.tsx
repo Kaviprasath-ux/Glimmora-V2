@@ -2,15 +2,15 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
 import { RoomModal } from '@/components/admin/RoomModal';
-import { Plus, Search, Edit, MoreVertical, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Search, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function RoomsTab() {
-  const { rooms, deleteRoom } = useAdmin();
+  const { rooms } = useAdmin();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState<any>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
 
   const itemsPerPage = 12;

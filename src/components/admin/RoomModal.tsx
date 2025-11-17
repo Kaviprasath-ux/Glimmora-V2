@@ -33,7 +33,7 @@ export function RoomModal({ isOpen, onClose, room, mode }: RoomModalProps) {
 
     const roomData = {
       ...formData,
-      features: formData.features.split(',').map(f => f.trim()),
+      features: formData.features.split(',').map((f: string) => f.trim()),
     };
 
     if (mode === 'create') {

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Download, TrendingUp, DollarSign, Users, Calendar, Hotel, Percent } from 'lucide-react';
+import { Download, TrendingUp, DollarSign, Users, Percent } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export function AnalyticsTab() {
@@ -207,9 +207,9 @@ export function AnalyticsTab() {
                 cx="50%"
                 cy="50%"
                 outerRadius={100}
-                label={(entry) => `${entry.percentage}%`}
+                label={(entry) => `${entry.percent?.toFixed(0)}%`}
               >
-                {roomTypeRevenue.map((entry, index) => (
+                {roomTypeRevenue.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>

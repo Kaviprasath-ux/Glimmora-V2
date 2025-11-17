@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { createContext, useState, useContext, ReactNode } from 'react';
 
-interface Booking {
+export interface Booking {
   id: string;
   bookingNumber: string;
   guestName: string;
@@ -18,7 +18,7 @@ interface Booking {
   createdAt: string;
 }
 
-interface Room {
+export interface Room {
   id: string;
   roomNumber: string;
   roomType: string;
@@ -72,7 +72,16 @@ interface AdminContextType {
     availableRooms: number;
     totalRooms: number;
     pendingPreCheckins: number;
+    totalRevenue: number;
+    revenueChange: number;
+    totalBookings: number;
+    bookingsChange: number;
+    occupancyChange: number;
+    totalGuests: number;
+    guestsChange: number;
   };
+  revenueData: { month: string; revenue: number }[];
+  roomTypeData: { type: string; revenue: number; count: number; percent: number }[];
   addBooking: (booking: Omit<Booking, 'id' | 'bookingNumber' | 'createdAt'>) => void;
   updateBooking: (id: string, data: Partial<Booking>) => void;
   deleteBooking: (id: string) => void;
@@ -83,6 +92,7 @@ interface AdminContextType {
   updateGuest: (id: string, data: Partial<Guest>) => void;
   addStaff: (staff: Omit<Staff, 'id'>) => void;
   updateStaff: (id: string, data: Partial<Staff>) => void;
+  updateStaffStatus: (id: string, status: Staff['status']) => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -253,6 +263,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   const [guests, setGuests] = useState<Guest[]>(() => generateGuests());
   const [staff, setStaff] = useState<Staff[]>(() => generateStaff());
 
+  const totalRevenue = bookings.filter(b => b.paymentStatus === 'paid').reduce((sum, b) => sum + b.totalAmount, 0);
+  const totalBookings = bookings.filter(b => b.status !== 'cancelled').length;
+  const totalGuests = guests.length;
+
   const stats = {
     todayCheckIns: bookings.filter(b => b.checkIn === new Date().toISOString().split('T')[0] && b.status !== 'cancelled').length,
     todayCheckOuts: bookings.filter(b => b.checkOut === new Date().toISOString().split('T')[0] && b.status !== 'cancelled').length,
@@ -265,7 +279,30 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     availableRooms: rooms.filter(r => r.status === 'available').length,
     totalRooms: rooms.length,
     pendingPreCheckins: bookings.filter(b => b.status === 'confirmed' && !b.preCheckinCompleted).length,
+    totalRevenue,
+    revenueChange: 12,
+    totalBookings,
+    bookingsChange: 8,
+    occupancyChange: 5,
+    totalGuests,
+    guestsChange: 15,
   };
+
+  const revenueData = [
+    { month: 'Jan', revenue: 45000 },
+    { month: 'Feb', revenue: 52000 },
+    { month: 'Mar', revenue: 48000 },
+    { month: 'Apr', revenue: 61000 },
+    { month: 'May', revenue: 72000 },
+    { month: 'Jun', revenue: 85000 },
+  ];
+
+  const roomTypeData = [
+    { type: 'Standard', revenue: 25000, count: 85, percent: 20 },
+    { type: 'Deluxe', revenue: 35000, count: 65, percent: 28 },
+    { type: 'Ocean View', revenue: 42000, count: 55, percent: 33 },
+    { type: 'Executive', revenue: 24000, count: 30, percent: 19 },
+  ];
 
   const addBooking = (bookingData: Omit<Booking, 'id' | 'bookingNumber' | 'createdAt'>) => {
     const newId = (Math.max(...bookings.map(b => parseInt(b.id))) + 1).toString();
@@ -346,6 +383,10 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     console.log('Staff updated:', id, data);
   };
 
+  const updateStaffStatus = (id: string, status: Staff['status']) => {
+    updateStaff(id, { status });
+  };
+
   return (
     <AdminContext.Provider
       value={{
@@ -354,6 +395,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         guests,
         staff,
         stats,
+        revenueData,
+        roomTypeData,
         addBooking,
         updateBooking,
         deleteBooking,
@@ -364,6 +407,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
         updateGuest,
         addStaff,
         updateStaff,
+        updateStaffStatus,
       }}
     >
       {children}
