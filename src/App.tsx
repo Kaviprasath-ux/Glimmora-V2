@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext';
 import { BookingProvider } from './contexts/BookingContext';
 import { PreCheckInProvider } from './contexts/PreCheckInContext';
 import { HomePage } from './pages/Home';
-import { Login } from './pages/Auth/Login';
-import { SignUp } from './pages/Auth/SignUp';
+import { LoginPage } from './pages/Auth/LoginPage';
+import { SignupPage } from './pages/Auth/SignupPage';
+import { ForgotPasswordPage } from './pages/Auth/ForgotPasswordPage';
 import { RoomsPage } from './pages/Rooms/RoomsPage';
 import { RoomDetailPage } from './pages/Rooms/RoomDetailPage';
 import { ContactPage } from './pages/Contact/ContactPage';
@@ -17,55 +19,67 @@ import { PreCheckInPage } from './pages/PreCheckIn/PreCheckInPage';
 import { DashboardPage } from './pages/Dashboard/DashboardPage';
 import { NotFound } from './pages/NotFound/NotFound';
 import { PublicLayout } from './components/layout/PublicLayout';
-import { AuthLayout } from './components/layout/AuthLayout';
-import { GuestRoute } from './routes/guards/GuestRoute';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
-    <PreCheckInProvider>
-      <BookingProvider>
-        <Router>
-          <Toaster position="top-right" />
-          <Routes>
-          {/* Public routes with navbar/footer */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<HomePage />} />
+    <Router>
+      <AuthProvider>
+        <PreCheckInProvider>
+          <BookingProvider>
+            <Toaster position="top-right" />
+            <Routes>
+              {/* Public routes with navbar/footer */}
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<HomePage />} />
 
-            {/* Rooms routes */}
-            <Route path="/rooms" element={<RoomsPage />} />
-            <Route path="/rooms/:slug" element={<RoomDetailPage />} />
+                {/* Rooms routes */}
+                <Route path="/rooms" element={<RoomsPage />} />
+                <Route path="/rooms/:slug" element={<RoomDetailPage />} />
 
-            {/* Contact route */}
-            <Route path="/contact" element={<ContactPage />} />
+                {/* Contact route */}
+                <Route path="/contact" element={<ContactPage />} />
 
-            {/* Pre-Check-In route */}
-            <Route path="/pre-checkin" element={<PreCheckInPage />} />
+                {/* Booking flow routes */}
+                <Route path="/booking" element={<BookingPage />} />
+                <Route path="/booking/review" element={<BookingReview />} />
+                <Route path="/booking/payment" element={<BookingPayment />} />
+                <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+                <Route path="/booking/failed" element={<BookingFailed />} />
+              </Route>
 
-            {/* Dashboard route */}
-            <Route path="/dashboard" element={<DashboardPage />} />
+              {/* Protected routes */}
+              <Route element={<PublicLayout />}>
+                <Route
+                  path="/pre-checkin"
+                  element={
+                    <ProtectedRoute>
+                      <PreCheckInPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
 
-            {/* Booking flow routes */}
-            <Route path="/booking" element={<BookingPage />} />
-            <Route path="/booking/review" element={<BookingReview />} />
-            <Route path="/booking/payment" element={<BookingPayment />} />
-            <Route path="/booking/confirmation" element={<BookingConfirmation />} />
-            <Route path="/booking/failed" element={<BookingFailed />} />
-          </Route>
+              {/* Auth routes (full page) */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* Auth routes (guest only) */}
-        <Route element={<AuthLayout />}>
-          <Route element={<GuestRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Route>
-        </Route>
-
-          {/* 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        </Router>
-      </BookingProvider>
-    </PreCheckInProvider>
+              {/* 404 */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BookingProvider>
+        </PreCheckInProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
