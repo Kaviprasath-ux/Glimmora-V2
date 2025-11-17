@@ -5,7 +5,7 @@ import { Calendar, ClipboardCheck, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 export function UserDropdown() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -30,9 +30,9 @@ export function UserDropdown() {
   if (!user) return null;
 
   const menuItems = [
-    { icon: Calendar, label: 'My Bookings', path: '/rooms' },
+    { icon: Calendar, label: 'My Bookings', path: '/dashboard?tab=bookings' },
     { icon: ClipboardCheck, label: 'Pre-Check-In', path: '/pre-checkin', highlight: true },
-    { icon: Settings, label: 'Account Settings', path: '/contact' },
+    { icon: Settings, label: 'Account Settings', path: '/dashboard?tab=security' },
   ];
 
   const handleNavigate = (path: string) => {
@@ -41,8 +41,7 @@ export function UserDropdown() {
   };
 
   const handleLogout = () => {
-    // TODO: Implement actual logout logic
-    console.log('Logout clicked');
+    logout();
     setIsOpen(false);
   };
 

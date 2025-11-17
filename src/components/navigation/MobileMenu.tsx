@@ -12,7 +12,7 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   // Close menu on route change
   useEffect(() => {
@@ -41,9 +41,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   ];
 
   const accountLinks = [
-    { name: 'My Bookings', path: '/rooms', icon: Calendar },
+    { name: 'My Bookings', path: '/dashboard?tab=bookings', icon: Calendar },
     { name: 'Pre-Check-In', path: '/pre-checkin', icon: ClipboardCheck },
-    { name: 'Account Settings', path: '/contact', icon: Settings },
+    { name: 'Account Settings', path: '/dashboard?tab=security', icon: Settings },
   ];
 
   const handleNavigate = (path: string) => {
@@ -51,8 +51,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   };
 
   const handleLogout = () => {
-    // TODO: Implement actual logout logic
-    console.log('Logout clicked');
+    logout();
     onClose();
   };
 

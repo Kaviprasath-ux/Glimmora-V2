@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User, Calendar, Settings, CreditCard, Shield, LayoutDashboard, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { OverviewTab } from './tabs/OverviewTab';
 import { ProfileTab } from './tabs/ProfileTab';
 import { BookingsTab } from './tabs/BookingsTab';
@@ -19,14 +20,28 @@ const tabs = [
 ];
 
 export function DashboardPage() {
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Read tab from URL on mount and when searchParams change
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && tabs.some(tab => tab.id === tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [searchParams]);
+
+  // Update URL when tab changes
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    setSearchParams({ tab: tabId });
+  };
 
   const ActiveTabComponent = tabs.find(tab => tab.id === activeTab)?.component;
 
   const handleLogout = () => {
-    // TODO: Implement actual logout logic
-    navigate('/');
+    logout();
   };
 
   return (
@@ -41,15 +56,19 @@ export function DashboardPage() {
             </div>
             <div className="flex items-center gap-4">
               {/* User Profile */}
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  JD
+              {user && (
+                <div className="flex items-center gap-3">
+                  <img
+                    src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}`}
+                    alt={user.fullName}
+                    className="w-12 h-12 rounded-full"
+                  />
+                  <div className="hidden sm:block">
+                    <div className="font-semibold text-neutral-900">{user.fullName}</div>
+                    <div className="text-sm text-neutral-600">{user.email}</div>
+                  </div>
                 </div>
-                <div className="hidden sm:block">
-                  <div className="font-semibold text-neutral-900">John Doe</div>
-                  <div className="text-sm text-neutral-600">john.doe@email.com</div>
-                </div>
-              </div>
+              )}
               {/* Logout */}
               <button
                 onClick={handleLogout}
@@ -72,7 +91,7 @@ export function DashboardPage() {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => handleTabChange(tab.id)}
                   className={`flex items-center gap-2 px-6 py-4 font-medium transition-all whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'text-primary-600 border-b-2 border-primary-600'
