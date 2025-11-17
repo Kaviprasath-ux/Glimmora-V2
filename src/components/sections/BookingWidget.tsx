@@ -30,7 +30,6 @@ export const BookingWidget = () => {
   const children = watch('children');
   const infants = watch('infants');
   const checkIn = watch('checkIn');
-  const checkOut = watch('checkOut');
 
   const totalGuests = (adults || 0) + (children || 0) + (infants || 0);
 

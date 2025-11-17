@@ -13,7 +13,7 @@ import { ROUTES } from '@/config/constants';
 export const SignUp = () => {
   const navigate = useNavigate();
   const { signup } = useAuth();
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | undefined>(undefined);
 
   const {
     register,
@@ -25,7 +25,7 @@ export const SignUp = () => {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      setApiError(null);
+      setApiError(undefined);
       const { confirmPassword, ...signupData } = data;
       await signup(signupData);
       toast.success('Account created successfully!');

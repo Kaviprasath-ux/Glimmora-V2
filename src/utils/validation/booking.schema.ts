@@ -3,10 +3,10 @@ import { z } from 'zod';
 export const bookingWidgetSchema = z
   .object({
     checkIn: z.date({
-      required_error: 'Check-in date is required',
+      message: 'Check-in date is required',
     }),
     checkOut: z.date({
-      required_error: 'Check-out date is required',
+      message: 'Check-out date is required',
     }),
     adults: z
       .number()

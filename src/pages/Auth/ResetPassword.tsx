@@ -14,7 +14,7 @@ export const ResetPassword = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | undefined>(undefined);
   const [resetSuccess, setResetSuccess] = useState(false);
 
   const {
@@ -32,7 +32,7 @@ export const ResetPassword = () => {
     }
 
     try {
-      setApiError(null);
+      setApiError(undefined);
       await apiClient.post('/auth/reset-password', {
         token,
         password: data.password,

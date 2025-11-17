@@ -95,5 +95,12 @@ export interface CreateBookingData {
   roomId: string;
   checkIn: string;
   checkOut: string;
-  guests: number;
+  guests: {
+    adults: number;
+    children: number;
+    infants: number;
+  };
+  guestInfo: GuestInformation;
+  paymentMethodId: string;
+  saveCard?: boolean;
 }

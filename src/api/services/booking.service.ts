@@ -26,6 +26,10 @@ export const bookingService = {
     return data.data;
   },
 
+  getBooking: async (id: string) => {
+    return bookingService.getBookingById(id);
+  },
+
   cancelBooking: async (id: string) => {
     const { data } = await apiClient.post<ApiResponse<Booking>>(
       API_ENDPOINTS.BOOKINGS.CANCEL(id)
@@ -33,3 +37,6 @@ export const bookingService = {
     return data.data;
   },
 };
+
+// Export as bookingApi for consistency with component imports
+export const bookingApi = bookingService;

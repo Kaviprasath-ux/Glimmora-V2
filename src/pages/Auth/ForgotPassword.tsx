@@ -11,7 +11,7 @@ import { ROUTES } from '@/config/constants';
 import { apiClient } from '@/api/client';
 
 export const ForgotPassword = () => {
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | undefined>(undefined);
   const [emailSent, setEmailSent] = useState(false);
 
   const {
@@ -25,7 +25,7 @@ export const ForgotPassword = () => {
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      setApiError(null);
+      setApiError(undefined);
       await apiClient.post('/auth/forgot-password', data);
       setEmailSent(true);
       toast.success('Password reset email sent!');

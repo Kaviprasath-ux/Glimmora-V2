@@ -13,7 +13,7 @@ import { ROUTES } from '@/config/constants';
 export const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | undefined>(undefined);
 
   const {
     register,
@@ -25,7 +25,7 @@ export const Login = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      setApiError(null);
+      setApiError(undefined);
       await login(data);
       toast.success('Login successful!');
       navigate(ROUTES.DASHBOARD);
