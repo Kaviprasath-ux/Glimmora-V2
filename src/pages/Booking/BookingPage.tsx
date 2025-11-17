@@ -22,45 +22,43 @@ export function BookingPage() {
   const [searchParams] = useSearchParams();
   const { bookingData, updateBookingData } = useBooking();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Get room and search params from URL
   useEffect(() => {
     const roomSlug = searchParams.get('room');
-    const checkIn = searchParams.get('checkIn');
-    const checkOut = searchParams.get('checkOut');
-    const adults = searchParams.get('adults');
-    const children = searchParams.get('children');
+    const checkIn = searchParams.get('checkIn') || '';
+    const checkOut = searchParams.get('checkOut') || '';
+    const adults = parseInt(searchParams.get('adults') || '1');
+    const children = parseInt(searchParams.get('children') || '0');
 
-    // Update room if not already set
-    if (roomSlug && !bookingData.room) {
+    if (roomSlug) {
       const room = rooms.find(r => r.slug === roomSlug);
       if (room) {
-        updateBookingData({ room });
+        updateBookingData({
+          room,
+          checkIn,
+          checkOut,
+          guests: { adults, children }
+        });
+        setIsLoading(false);
       } else {
         navigate('/rooms');
-        return;
       }
+    } else {
+      navigate('/rooms');
     }
-
-    // Update dates and guests if available in URL
-    if (checkIn && checkOut) {
-      updateBookingData({
-        checkIn,
-        checkOut,
-        guests: {
-          adults: adults ? parseInt(adults) : 1,
-          children: children ? parseInt(children) : 0,
-        },
-      });
-    }
-  }, [searchParams, bookingData.room, updateBookingData, navigate]);
+  }, [searchParams, updateBookingData, navigate]);
 
   const CurrentStepComponent = steps.find(s => s.id === currentStep)?.component;
 
-  if (!bookingData.room) {
+  if (isLoading || !bookingData.room) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="text-lg text-neutral-600">Loading...</div>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-neutral-600">Loading booking...</p>
+        </div>
       </div>
     );
   }
@@ -72,7 +70,18 @@ export function BookingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => currentStep === 1 ? navigate(`/rooms/${bookingData.room!.slug}`) : setCurrentStep(currentStep - 1)}
+              onClick={() => {
+                if (currentStep === 1) {
+                  const params = new URLSearchParams();
+                  if (bookingData.checkIn) params.set('checkIn', bookingData.checkIn);
+                  if (bookingData.checkOut) params.set('checkOut', bookingData.checkOut);
+                  params.set('adults', bookingData.guests.adults.toString());
+                  params.set('children', bookingData.guests.children.toString());
+                  navigate(`/rooms/${bookingData.room!.slug}?${params.toString()}`);
+                } else {
+                  setCurrentStep(currentStep - 1);
+                }
+              }}
               className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -106,6 +115,20 @@ export function BookingPage() {
 
             <div className="w-20" /> {/* Spacer for balance */}
           </div>
+
+          {/* Pre-filled Info Banner */}
+          {currentStep === 1 && bookingData.checkIn && bookingData.checkOut && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2"
+            >
+              <Check className="w-5 h-5 text-green-600" />
+              <span className="text-sm text-green-700">
+                <strong>Dates pre-filled!</strong> Your selected dates are ready. You can modify them below if needed.
+              </span>
+            </motion.div>
+          )}
         </div>
       </div>
 

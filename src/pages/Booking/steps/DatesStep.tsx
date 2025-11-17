@@ -2,8 +2,9 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Calendar, Plus, Minus } from 'lucide-react';
+import { Calendar, Plus, Minus, CheckCircle } from 'lucide-react';
 import { useBooking } from '@/contexts/BookingContext';
+import { format } from 'date-fns';
 
 const datesSchema = z.object({
   checkIn: z.string().min(1, 'Check-in date is required'),
@@ -23,7 +24,11 @@ interface DatesStepProps {
 }
 
 export function DatesStep({ onNext }: DatesStepProps) {
-  const { bookingData, updateBookingData } = useBooking();
+  const { bookingData, updateBookingData, calculateTotal } = useBooking();
+  const { nights } = calculateTotal();
+
+  // Check if dates are pre-filled
+  const hasPreFilledDates = bookingData.checkIn && bookingData.checkOut;
 
   const {
     register,
@@ -68,10 +73,52 @@ export function DatesStep({ onNext }: DatesStepProps) {
       animate={{ opacity: 1, y: 0 }}
       className="bg-white rounded-2xl p-8 shadow-sm"
     >
+      {/* Header */}
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Select Your Dates</h2>
-        <p className="text-neutral-600">Choose your check-in and check-out dates, and number of guests</p>
+        <h2 className="text-3xl font-bold text-neutral-900 mb-2">
+          {hasPreFilledDates ? 'Confirm Your Dates' : 'Select Your Dates'}
+        </h2>
+        <p className="text-neutral-600">
+          {hasPreFilledDates
+            ? 'Your dates are pre-filled from your search. You can modify them if needed.'
+            : 'Choose your check-in and check-out dates, and number of guests'
+          }
+        </p>
       </div>
+
+      {/* Pre-filled Confirmation Card */}
+      {hasPreFilledDates && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-xl"
+        >
+          <div className="flex items-start gap-3">
+            <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="font-semibold text-green-900 mb-2">Dates from Your Search</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <div className="text-green-700 font-medium mb-1">Check-in</div>
+                  <div className="text-green-900 font-semibold">
+                    {format(new Date(bookingData.checkIn), 'EEEE, MMM dd, yyyy')}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-green-700 font-medium mb-1">Check-out</div>
+                  <div className="text-green-900 font-semibold">
+                    {format(new Date(bookingData.checkOut), 'EEEE, MMM dd, yyyy')}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2 text-sm text-green-700">
+                <strong>{nights}</strong> {nights === 1 ? 'night' : 'nights'} •
+                <strong className="ml-1">{bookingData.guests.adults + bookingData.guests.children}</strong> guests
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Date Selection */}
@@ -90,7 +137,9 @@ export function DatesStep({ onNext }: DatesStepProps) {
                 className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:outline-none transition-all ${
                   errors.checkIn
                     ? 'border-red-300 focus:border-red-500'
-                    : 'border-neutral-300 focus:border-primary-500'
+                    : hasPreFilledDates
+                      ? 'border-green-300 focus:border-green-500 bg-green-50'
+                      : 'border-neutral-300 focus:border-primary-500'
                 }`}
               />
             </div>
@@ -113,7 +162,9 @@ export function DatesStep({ onNext }: DatesStepProps) {
                 className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:outline-none transition-all ${
                   errors.checkOut
                     ? 'border-red-300 focus:border-red-500'
-                    : 'border-neutral-300 focus:border-primary-500'
+                    : hasPreFilledDates
+                      ? 'border-green-300 focus:border-green-500 bg-green-50'
+                      : 'border-neutral-300 focus:border-primary-500'
                 }`}
               />
             </div>
@@ -130,7 +181,9 @@ export function DatesStep({ onNext }: DatesStepProps) {
           </label>
           <div className="space-y-4">
             {/* Adults */}
-            <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl">
+            <div className={`flex items-center justify-between p-4 rounded-xl ${
+              hasPreFilledDates ? 'bg-green-50 border-2 border-green-200' : 'bg-neutral-50'
+            }`}>
               <div>
                 <div className="font-semibold text-neutral-900">Adults</div>
                 <div className="text-sm text-neutral-600">Age 13+</div>
@@ -159,7 +212,9 @@ export function DatesStep({ onNext }: DatesStepProps) {
             </div>
 
             {/* Children */}
-            <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl">
+            <div className={`flex items-center justify-between p-4 rounded-xl ${
+              hasPreFilledDates ? 'bg-green-50 border-2 border-green-200' : 'bg-neutral-50'
+            }`}>
               <div>
                 <div className="font-semibold text-neutral-900">Children</div>
                 <div className="text-sm text-neutral-600">Age 0-12</div>
@@ -197,7 +252,7 @@ export function DatesStep({ onNext }: DatesStepProps) {
           type="submit"
           className="w-full py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg rounded-xl transition-all"
         >
-          Continue to Guest Information
+          {hasPreFilledDates ? 'Confirm & Continue' : 'Continue to Guest Information'}
         </button>
       </form>
     </motion.div>
