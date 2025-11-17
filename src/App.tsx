@@ -3,6 +3,8 @@ import { Toaster } from 'react-hot-toast';
 import { HomePage } from './pages/Home';
 import { Login } from './pages/Auth/Login';
 import { SignUp } from './pages/Auth/SignUp';
+import { RoomsPage } from './pages/Rooms/RoomsPage';
+import { RoomDetailPage } from './pages/Rooms/RoomDetailPage';
 import { BookingReview } from './pages/Booking/BookingReview';
 import { BookingPayment } from './pages/Booking/BookingPayment';
 import { BookingConfirmation } from './pages/Booking/BookingConfirmation';
@@ -20,6 +22,10 @@ function App() {
         {/* Public routes with navbar/footer */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
+
+          {/* Rooms routes */}
+          <Route path="/rooms" element={<RoomsPage />} />
+          <Route path="/rooms/:slug" element={<RoomDetailPage />} />
 
           {/* Booking flow routes */}
           <Route path="/booking/review" element={<BookingReview />} />
