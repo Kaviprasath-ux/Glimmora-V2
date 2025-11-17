@@ -27,7 +27,7 @@ export function AIAssistantShowcase() {
   }, [inView, currentMessageIndex]);
 
   return (
-    <section ref={ref} className="py-20 sm:py-28 bg-gradient-to-b from-white to-neutral-50">
+    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-white to-neutral-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Content */}
@@ -36,20 +36,20 @@ export function AIAssistantShowcase() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-50 border border-primary-100 mb-6">
-              <Bot className="w-4 h-4 text-primary-600" />
-              <span className="text-primary-700 text-sm font-medium">AI Concierge</span>
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-50 border border-primary-100 mb-8 shadow-sm">
+              <Bot className="w-5 h-5 text-primary-600" />
+              <span className="text-primary-700 text-sm font-semibold">AI Concierge</span>
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-8 leading-tight">
               Your Personal
               <br />
-              <span className="bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 bg-clip-text text-transparent">
                 AI Assistant
               </span>
             </h2>
 
-            <p className="text-lg sm:text-xl text-neutral-600 mb-8 leading-relaxed">
+            <p className="text-lg sm:text-xl text-neutral-600 mb-10 leading-relaxed">
               Get instant, personalized recommendations 24/7. Our AI understands your preferences
               and helps you make the most of your stay.
             </p>
@@ -64,15 +64,15 @@ export function AIAssistantShowcase() {
                   key={index}
                   initial={{ opacity: 0, x: -30 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                  className="flex gap-4"
+                  transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.3 + index * 0.1 }}
+                  className="flex gap-4 p-5 rounded-2xl hover:bg-primary-50/50 transition-all duration-300"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-2xl">
+                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl shadow-sm">
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-neutral-900 mb-1">{feature.title}</h3>
-                    <p className="text-neutral-600">{feature.desc}</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-2">{feature.title}</h3>
+                    <p className="text-neutral-600 leading-relaxed">{feature.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -87,17 +87,17 @@ export function AIAssistantShowcase() {
           >
             <div className="relative">
               {/* Chat Window */}
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-neutral-200">
+              <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-neutral-100">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-4 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                    <Bot className="w-6 h-6 text-white" />
+                <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-5 flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center shadow-lg">
+                    <Bot className="w-7 h-7 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white font-semibold">TERRA AI Concierge</h3>
+                    <h3 className="text-white font-bold text-lg">TERRA AI Concierge</h3>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                      <span className="text-white/80 text-sm">Online</span>
+                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-sm" />
+                      <span className="text-white/90 text-sm font-medium">Online</span>
                     </div>
                   </div>
                 </div>
@@ -110,11 +110,11 @@ export function AIAssistantShowcase() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex gap-3"
                   >
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
-                      <Bot className="w-4 h-4 text-white" />
+                    <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center shadow-md">
+                      <Bot className="w-5 h-5 text-white" />
                     </div>
-                    <div className="flex-1 bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
-                      <p className="text-neutral-700">
+                    <div className="flex-1 bg-white rounded-2xl rounded-tl-none px-5 py-3.5 shadow-md">
+                      <p className="text-neutral-700 leading-relaxed">
                         Hi! I'm your AI concierge. How can I help you today? ✨
                       </p>
                     </div>
@@ -129,21 +129,21 @@ export function AIAssistantShowcase() {
                       transition={{ duration: 0.4 }}
                       className={`flex gap-3 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}
                     >
-                      <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                        message.type === 'ai' ? 'bg-primary-500' : 'bg-neutral-300'
+                      <div className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center shadow-md ${
+                        message.type === 'ai' ? 'bg-primary-500' : 'bg-neutral-400'
                       }`}>
                         {message.type === 'ai' ? (
-                          <Bot className="w-4 h-4 text-white" />
+                          <Bot className="w-5 h-5 text-white" />
                         ) : (
-                          <UserIcon className="w-4 h-4 text-white" />
+                          <UserIcon className="w-5 h-5 text-white" />
                         )}
                       </div>
-                      <div className={`flex-1 rounded-2xl px-4 py-3 shadow-sm max-w-[85%] ${
+                      <div className={`flex-1 rounded-2xl px-5 py-3.5 shadow-md max-w-[85%] ${
                         message.type === 'ai'
                           ? 'bg-white rounded-tl-none'
                           : 'bg-primary-500 text-white rounded-tr-none'
                       }`}>
-                        <p className={message.type === 'ai' ? 'text-neutral-700' : ''}>
+                        <p className={`leading-relaxed ${message.type === 'ai' ? 'text-neutral-700' : ''}`}>
                           {message.text}
                         </p>
                       </div>
@@ -172,15 +172,15 @@ export function AIAssistantShowcase() {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 bg-white border-t border-neutral-200">
+                <div className="p-5 bg-white border-t border-neutral-200">
                   <div className="flex gap-3">
                     <input
                       type="text"
                       placeholder="Ask me anything..."
-                      className="flex-1 px-4 py-3 bg-neutral-50 border border-neutral-200 rounded-xl focus:outline-none focus:border-primary-300 transition-colors"
+                      className="flex-1 px-5 py-3.5 bg-neutral-50 border border-neutral-200 rounded-2xl focus:outline-none focus:border-primary-400 focus:bg-white transition-all shadow-sm"
                       disabled
                     />
-                    <button className="w-12 h-12 bg-primary-500 hover:bg-primary-600 rounded-xl flex items-center justify-center text-white transition-colors">
+                    <button className="w-14 h-14 bg-primary-500 hover:bg-primary-600 rounded-2xl flex items-center justify-center text-white transition-all shadow-lg hover:shadow-xl">
                       <Send className="w-5 h-5" />
                     </button>
                   </div>

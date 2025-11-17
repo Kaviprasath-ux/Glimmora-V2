@@ -52,26 +52,26 @@ export function FeaturesGrid() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-20 sm:py-28 bg-gradient-to-b from-white via-neutral-50 to-white">
+    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-white via-neutral-50 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <span className="text-primary-500 font-semibold text-sm uppercase tracking-wider">
+          <span className="inline-block px-4 py-2 rounded-full bg-primary-50 text-primary-600 font-semibold text-sm uppercase tracking-wider mb-6">
             Why Choose Us
           </span>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mt-4 mb-6">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
             Experience the Future of
             <br />
-            <span className="bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 bg-clip-text text-transparent">
               Hospitality
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
             Cutting-edge technology meets timeless luxury in every aspect of your stay
           </p>
         </motion.div>
@@ -85,24 +85,24 @@ export function FeaturesGrid() {
                 key={index}
                 initial={{ opacity: 0, y: 50 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                transition={{ type: "spring", stiffness: 100, damping: 20, delay: index * 0.1 }}
+                whileHover={{ y: -12, transition: { type: "spring", stiffness: 300, damping: 20 } }}
                 className="group"
               >
-                <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-neutral-100 overflow-hidden">
+                <div className="relative bg-white rounded-3xl p-9 shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition-all duration-500 border border-neutral-100 overflow-hidden h-full">
                   {/* Gradient Background on Hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
                   {/* Icon */}
-                  <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} p-3.5 mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} p-3.5 mb-7 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
                     <Icon className="w-full h-full text-white" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-2xl font-bold text-neutral-900 mb-3 group-hover:text-primary-600 transition-colors">
+                  <h3 className="text-2xl font-bold text-neutral-900 mb-4 group-hover:text-primary-600 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-neutral-600 leading-relaxed">
+                  <p className="text-neutral-600 leading-relaxed text-base">
                     {feature.description}
                   </p>
 

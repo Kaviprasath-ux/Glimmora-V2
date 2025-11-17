@@ -43,14 +43,16 @@ export function HeroSection() {
           className="max-w-5xl mx-auto"
         >
           {/* Main Headline - Large White Text */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[1.1] tracking-tight drop-shadow-2xl">
             Discover Your Perfect
             <br />
-            Stay Anywhere
+            <span className="bg-gradient-to-r from-white via-white to-primary-200 bg-clip-text text-transparent">
+              Stay Anywhere
+            </span>
           </h1>
 
           {/* Subheadline - Gray/White Text */}
-          <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-12 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-16 max-w-4xl mx-auto leading-relaxed font-light">
             Book unique stays powered by AI - your gateway to personalized luxury and seamless hospitality
           </p>
 
@@ -58,10 +60,10 @@ export function HeroSection() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
             className="max-w-4xl mx-auto"
           >
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-2 border border-white/20 shadow-2xl">
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-3 border border-white/30 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                 {/* Check-in Date */}
                 <div className="relative">
@@ -71,7 +73,7 @@ export function HeroSection() {
                     value={searchData.checkIn}
                     onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
                     min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-white placeholder-white/50 border border-white/10 focus:border-white/30 focus:outline-none"
+                    className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-white placeholder-white/50 border border-white/10 focus:border-white/40 focus:bg-white/15 focus:outline-none focus:shadow-lg"
                   />
                 </div>
 
@@ -83,7 +85,7 @@ export function HeroSection() {
                     value={searchData.checkOut}
                     onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
                     min={searchData.checkIn || new Date().toISOString().split('T')[0]}
-                    className="w-full px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-white placeholder-white/50 border border-white/10 focus:border-white/30 focus:outline-none"
+                    className="w-full px-6 py-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all text-white placeholder-white/50 border border-white/10 focus:border-white/40 focus:bg-white/15 focus:outline-none focus:shadow-lg"
                   />
                 </div>
 
@@ -93,7 +95,7 @@ export function HeroSection() {
                   <button
                     type="button"
                     onClick={() => setShowGuestsDropdown(!showGuestsDropdown)}
-                    className="w-full px-6 py-3 text-left bg-white/5 hover:bg-white/10 rounded-xl transition-all group border border-white/10 focus:border-white/30 focus:outline-none"
+                    className="w-full px-6 py-4 text-left bg-white/5 hover:bg-white/10 rounded-2xl transition-all group border border-white/10 focus:border-white/40 focus:bg-white/15 focus:outline-none focus:shadow-lg"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -114,9 +116,10 @@ export function HeroSection() {
                         onClick={() => setShowGuestsDropdown(false)}
                       />
                       <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-neutral-200 p-4 z-20"
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] border border-neutral-100 p-5 z-20"
                       >
                         {/* Adults */}
                         <div className="flex items-center justify-between mb-4">
@@ -176,7 +179,7 @@ export function HeroSection() {
 
                         <button
                           onClick={() => setShowGuestsDropdown(false)}
-                          className="w-full mt-4 py-2 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-all"
+                          className="w-full mt-4 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all shadow-lg hover:shadow-xl"
                         >
                           Done
                         </button>
@@ -195,9 +198,10 @@ export function HeroSection() {
                     params.set('children', searchData.children.toString());
                     navigate(`/rooms?${params.toString()}`);
                   }}
-                  className="px-8 py-4 bg-white hover:bg-neutral-100 text-neutral-900 font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2 mt-auto"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-5 bg-white hover:bg-neutral-50 text-neutral-900 font-bold text-lg rounded-2xl transition-all flex items-center justify-center gap-2 mt-auto shadow-xl hover:shadow-2xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 >
                   Explore
                 </motion.button>

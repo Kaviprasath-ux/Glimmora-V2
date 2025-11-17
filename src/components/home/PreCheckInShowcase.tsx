@@ -59,27 +59,27 @@ export function PreCheckInShowcase() {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section ref={ref} className="py-20 sm:py-28 bg-gradient-to-b from-neutral-900 to-neutral-800 text-white overflow-hidden">
+    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-neutral-900 to-neutral-800 text-white overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-            <Monitor className="w-4 h-4 text-primary-400" />
-            <span className="text-white text-sm font-medium">Pre-Check-In Experience</span>
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 shadow-xl">
+            <Monitor className="w-5 h-5 text-primary-400" />
+            <span className="text-white text-sm font-semibold">Pre-Check-In Experience</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
             Skip the Line,
             <br />
-            <span className="bg-gradient-to-r from-primary-400 to-primary-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary-400 via-primary-300 to-primary-200 bg-clip-text text-transparent">
               Start Relaxing Sooner
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
             Complete your check-in online before you arrive and walk straight to your room
           </p>
         </motion.div>
@@ -95,19 +95,19 @@ export function PreCheckInShowcase() {
           >
             <div className="relative">
               {/* Browser Window Frame */}
-              <div className="bg-neutral-800 rounded-t-2xl px-6 py-4 flex items-center gap-2 border-b border-neutral-700">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
+              <div className="bg-neutral-800 rounded-t-3xl px-6 py-5 flex items-center gap-2 border-b border-neutral-700">
+                <div className="flex gap-2.5">
+                  <div className="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm" />
+                  <div className="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm" />
+                  <div className="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm" />
                 </div>
-                <div className="flex-1 ml-6 bg-neutral-700 rounded-lg px-4 py-2 text-sm text-white/60">
+                <div className="flex-1 ml-6 bg-neutral-700 rounded-xl px-5 py-2.5 text-sm text-white/70 font-medium">
                   terrasuites.com/pre-checkin
                 </div>
               </div>
 
               {/* Mockup Content */}
-              <div className="relative bg-white rounded-b-2xl overflow-hidden aspect-video">
+              <div className="relative bg-white rounded-b-3xl overflow-hidden aspect-video shadow-2xl">
                 <motion.img
                   key={activeStep}
                   src={steps[activeStep].mockup}
@@ -141,7 +141,7 @@ export function PreCheckInShowcase() {
               </div>
 
               {/* Decorative Glow */}
-              <div className="absolute -inset-px bg-gradient-to-r from-primary-500/50 to-primary-600/50 rounded-2xl blur-xl -z-10 opacity-50" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary-500/40 to-primary-600/40 rounded-3xl blur-2xl -z-10 opacity-60" />
             </div>
           </motion.div>
 
@@ -157,12 +157,12 @@ export function PreCheckInShowcase() {
                   onClick={() => setActiveStep(index)}
                   initial={{ opacity: 0, y: 30 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 15, delay: index * 0.1 }}
+                  whileHover={{ y: -8, transition: { type: "spring", stiffness: 400, damping: 20 } }}
                   className={`relative p-6 rounded-2xl transition-all duration-300 ${
                     isActive
-                      ? 'bg-primary-500 shadow-2xl shadow-primary-500/30'
-                      : 'bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10'
+                      ? 'bg-primary-500 shadow-[0_20px_40px_rgba(99,102,241,0.4)]'
+                      : 'bg-white/5 hover:bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20'
                   }`}
                 >
                   {/* Step Number Badge */}
@@ -204,17 +204,18 @@ export function PreCheckInShowcase() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.8 }}
-            className="text-center mt-16"
+            className="text-center mt-20"
           >
             <motion.button
-              className="inline-flex items-center gap-3 px-8 py-4 bg-white text-neutral-900 font-semibold text-lg rounded-xl hover:bg-neutral-100 transition-all group"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-white text-neutral-900 font-bold text-lg rounded-2xl hover:bg-neutral-100 transition-all group shadow-2xl"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
             >
               Try Pre-Check-In Demo
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </motion.button>
-            <p className="text-white/60 text-sm mt-4">No booking required • Takes 2 minutes</p>
+            <p className="text-white/70 text-sm mt-5">No booking required • Takes 2 minutes</p>
           </motion.div>
         </div>
       </div>
