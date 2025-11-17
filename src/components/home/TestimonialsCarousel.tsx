@@ -89,29 +89,34 @@ export function TestimonialsCarousel() {
   }, [inView, currentIndex]);
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-neutral-50 to-white relative overflow-hidden">
+    <section ref={ref} className="py-28 sm:py-36 bg-gradient-to-b from-neutral-50/50 via-white to-neutral-50/50 relative overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:64px_64px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:64px_64px] opacity-50" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="text-center mb-24"
         >
-          <span className="inline-block px-4 py-2 rounded-full bg-primary-50 text-primary-600 font-semibold text-sm uppercase tracking-wider mb-6">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-block px-5 py-2.5 rounded-full bg-gradient-to-r from-primary-50 to-primary-100/80 text-primary-700 font-semibold text-sm uppercase tracking-wider mb-8 shadow-sm"
+          >
             Guest Reviews
-          </span>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-6 leading-tight">
+          </motion.span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-7 leading-[1.1]">
             What Our Guests
             <br />
             <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 bg-clip-text text-transparent">
               Are Saying
             </span>
           </h2>
-          <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl mx-auto leading-relaxed font-light">
             Real experiences from guests who've discovered the TERRA difference
           </p>
         </motion.div>
@@ -144,39 +149,39 @@ export function TestimonialsCarousel() {
                 }}
                 className="absolute w-full"
               >
-                <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] p-10 md:p-14 border border-neutral-100">
+                <div className="bg-white rounded-[2rem] shadow-[0_24px_80px_rgba(0,0,0,0.08)] hover:shadow-[0_32px_96px_rgba(0,0,0,0.12)] transition-shadow duration-500 p-12 md:p-16 border border-neutral-200/50">
                   {/* Quote Icon */}
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-8 shadow-lg">
-                    <Quote className="w-8 h-8 text-white" />
+                  <div className="w-20 h-20 rounded-[1.25rem] bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center mb-10 shadow-[0_8px_24px_rgba(0,0,0,0.15)]">
+                    <Quote className="w-10 h-10 text-white" strokeWidth={1.5} />
                   </div>
 
                   {/* Rating */}
-                  <div className="flex gap-1.5 mb-8">
+                  <div className="flex gap-2 mb-10">
                     {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="w-7 h-7 fill-yellow-400 text-yellow-400 drop-shadow-sm" />
                     ))}
                   </div>
 
                   {/* Text */}
-                  <p className="text-xl md:text-2xl text-neutral-700 leading-relaxed mb-10 font-light">
+                  <p className="text-xl md:text-2xl text-neutral-700 leading-relaxed mb-12 font-light">
                     "{testimonials[currentIndex].text}"
                   </p>
 
                   {/* Author */}
-                  <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-6">
                     <img
                       src={testimonials[currentIndex].avatar}
                       alt={testimonials[currentIndex].name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-primary-200 shadow-md"
+                      className="w-20 h-20 rounded-full object-cover border-4 border-primary-100/80 shadow-lg"
                     />
                     <div>
-                      <h4 className="text-lg font-bold text-neutral-900 mb-1">
+                      <h4 className="text-xl font-bold text-neutral-900 mb-1.5">
                         {testimonials[currentIndex].name}
                       </h4>
-                      <p className="text-neutral-600 font-medium">
+                      <p className="text-neutral-600 font-medium mb-1">
                         {testimonials[currentIndex].location}
                       </p>
-                      <p className="text-sm text-neutral-500">
+                      <p className="text-sm text-neutral-500 font-light">
                         {testimonials[currentIndex].date}
                       </p>
                     </div>
@@ -187,30 +192,32 @@ export function TestimonialsCarousel() {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-center gap-5 mt-10">
+          <div className="flex justify-center gap-6 mt-14">
             <motion.button
               onClick={() => paginate(-1)}
-              className="w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-2xl border border-neutral-200 flex items-center justify-center text-neutral-700 hover:text-primary-600 transition-all"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="w-16 h-16 rounded-full bg-white shadow-lg hover:shadow-xl border border-neutral-200 hover:border-primary-300 flex items-center justify-center text-neutral-700 hover:text-primary-600 transition-all duration-300"
+              whileHover={{ scale: 1.12, y: -2 }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 450, damping: 25 }}
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6" strokeWidth={2} />
             </motion.button>
 
             {/* Dots */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-3">
               {testimonials.map((_, index) => (
-                <button
+                <motion.button
                   key={index}
                   onClick={() => {
                     setDirection(index > currentIndex ? 1 : -1);
                     setCurrentIndex(index);
                   }}
-                  className={`h-2.5 rounded-full transition-all ${
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                  className={`h-3 rounded-full transition-all duration-300 ${
                     index === currentIndex
-                      ? 'w-10 bg-primary-500'
-                      : 'w-2.5 bg-neutral-300 hover:bg-neutral-400'
+                      ? 'w-12 bg-gradient-to-r from-primary-500 to-primary-600 shadow-md'
+                      : 'w-3 bg-neutral-300 hover:bg-neutral-400'
                   }`}
                 />
               ))}
@@ -218,22 +225,22 @@ export function TestimonialsCarousel() {
 
             <motion.button
               onClick={() => paginate(1)}
-              className="w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-2xl border border-neutral-200 flex items-center justify-center text-neutral-700 hover:text-primary-600 transition-all"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="w-16 h-16 rounded-full bg-white shadow-lg hover:shadow-xl border border-neutral-200 hover:border-primary-300 flex items-center justify-center text-neutral-700 hover:text-primary-600 transition-all duration-300"
+              whileHover={{ scale: 1.12, y: -2 }}
+              whileTap={{ scale: 0.92 }}
+              transition={{ type: "spring", stiffness: 450, damping: 25 }}
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6" strokeWidth={2} />
             </motion.button>
           </div>
         </div>
 
         {/* Trust Badges */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-10 max-w-5xl mx-auto"
         >
           {[
             { number: '4.9/5', label: 'Average Rating' },
@@ -241,12 +248,19 @@ export function TestimonialsCarousel() {
             { number: '98%', label: 'Would Recommend' },
             { number: '24/7', label: 'Support Available' },
           ].map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+              whileHover={{ y: -4, transition: { type: "spring", stiffness: 400, damping: 25 } }}
+              className="text-center p-6 rounded-[1.25rem] hover:bg-gradient-to-b hover:from-primary-50/50 hover:to-transparent transition-all duration-300"
+            >
+              <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent mb-3">
                 {stat.number}
               </div>
-              <div className="text-sm text-neutral-600">{stat.label}</div>
-            </div>
+              <div className="text-sm text-neutral-600 font-medium">{stat.label}</div>
+            </motion.div>
           ))}
         </motion.div>
       </div>

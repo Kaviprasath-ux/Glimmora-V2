@@ -27,21 +27,26 @@ export function AIAssistantShowcase() {
   }, [inView, currentMessageIndex]);
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 bg-gradient-to-b from-white to-neutral-50">
+    <section ref={ref} className="py-28 sm:py-36 bg-gradient-to-b from-white via-neutral-50/30 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-50 border border-primary-100 mb-8 shadow-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-gradient-to-r from-primary-50 to-primary-100/70 border border-primary-200/50 mb-10 shadow-sm"
+            >
               <Bot className="w-5 h-5 text-primary-600" />
-              <span className="text-primary-700 text-sm font-semibold">AI Concierge</span>
-            </div>
+              <span className="text-primary-700 text-sm font-semibold tracking-wide">AI Concierge</span>
+            </motion.div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-8 leading-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral-900 mb-9 leading-[1.1]">
               Your Personal
               <br />
               <span className="bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400 bg-clip-text text-transparent">
@@ -49,12 +54,12 @@ export function AIAssistantShowcase() {
               </span>
             </h2>
 
-            <p className="text-lg sm:text-xl text-neutral-600 mb-10 leading-relaxed">
+            <p className="text-lg sm:text-xl text-neutral-600 mb-12 leading-relaxed font-light">
               Get instant, personalized recommendations 24/7. Our AI understands your preferences
               and helps you make the most of your stay.
             </p>
 
-            <div className="space-y-6">
+            <div className="space-y-5">
               {[
                 { icon: '🎯', title: 'Personalized Suggestions', desc: 'Room recommendations based on your needs' },
                 { icon: '⚡', title: 'Instant Responses', desc: 'Get answers in seconds, any time of day' },
@@ -62,17 +67,18 @@ export function AIAssistantShowcase() {
               ].map((feature, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: -30 }}
+                  initial={{ opacity: 0, x: -40 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.3 + index * 0.1 }}
-                  className="flex gap-4 p-5 rounded-2xl hover:bg-primary-50/50 transition-all duration-300"
+                  transition={{ type: "spring", stiffness: 120, damping: 22, delay: 0.4 + index * 0.12 }}
+                  whileHover={{ x: 8, transition: { type: "spring", stiffness: 400, damping: 25 } }}
+                  className="flex gap-5 p-6 rounded-[1.25rem] hover:bg-gradient-to-r hover:from-primary-50/70 hover:to-primary-50/40 transition-all duration-400 border border-transparent hover:border-primary-100/50 hover:shadow-lg"
                 >
-                  <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl shadow-sm">
+                  <div className="flex-shrink-0 w-16 h-16 rounded-[1rem] bg-gradient-to-br from-primary-50 to-primary-100/80 flex items-center justify-center text-2xl shadow-md">
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-neutral-900 mb-2">{feature.title}</h3>
-                    <p className="text-neutral-600 leading-relaxed">{feature.desc}</p>
+                    <h3 className="text-lg font-bold text-neutral-900 mb-2.5">{feature.title}</h3>
+                    <p className="text-neutral-600 leading-relaxed font-light">{feature.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -81,39 +87,39 @@ export function AIAssistantShowcase() {
 
           {/* Chat Interface Mockup */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
           >
             <div className="relative">
               {/* Chat Window */}
-              <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-neutral-100">
+              <div className="bg-white rounded-[2rem] shadow-[0_24px_80px_rgba(0,0,0,0.12)] overflow-hidden border border-neutral-200/80">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-5 flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center shadow-lg">
-                    <Bot className="w-7 h-7 text-white" />
+                <div className="bg-gradient-to-r from-primary-500 to-primary-600 px-7 py-6 flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-xl">
+                    <Bot className="w-8 h-8 text-white" strokeWidth={2} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white font-bold text-lg">TERRA AI Concierge</h3>
+                    <h3 className="text-white font-bold text-xl mb-1">TERRA AI Concierge</h3>
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-sm" />
-                      <span className="text-white/90 text-sm font-medium">Online</span>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse shadow-lg" />
+                      <span className="text-white/95 text-sm font-medium">Online</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Messages */}
-                <div className="p-6 space-y-4 h-96 overflow-y-auto bg-neutral-50">
+                <div className="p-7 space-y-5 h-[28rem] overflow-y-auto bg-gradient-to-b from-neutral-50/50 to-neutral-50">
                   {/* Welcome Message */}
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3"
+                    className="flex gap-3.5"
                   >
-                    <div className="flex-shrink-0 w-9 h-9 rounded-full bg-primary-500 flex items-center justify-center shadow-md">
-                      <Bot className="w-5 h-5 text-white" />
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg">
+                      <Bot className="w-5 h-5 text-white" strokeWidth={2} />
                     </div>
-                    <div className="flex-1 bg-white rounded-2xl rounded-tl-none px-5 py-3.5 shadow-md">
+                    <div className="flex-1 bg-white rounded-[1.25rem] rounded-tl-sm px-5 py-4 shadow-md border border-neutral-100">
                       <p className="text-neutral-700 leading-relaxed">
                         Hi! I'm your AI concierge. How can I help you today? ✨
                       </p>
@@ -126,22 +132,22 @@ export function AIAssistantShowcase() {
                       key={index}
                       initial={{ opacity: 0, y: 20, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.4 }}
-                      className={`flex gap-3 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className={`flex gap-3.5 ${message.type === 'user' ? 'flex-row-reverse' : ''}`}
                     >
-                      <div className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center shadow-md ${
-                        message.type === 'ai' ? 'bg-primary-500' : 'bg-neutral-400'
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${
+                        message.type === 'ai' ? 'bg-gradient-to-br from-primary-500 to-primary-600' : 'bg-gradient-to-br from-neutral-400 to-neutral-500'
                       }`}>
                         {message.type === 'ai' ? (
-                          <Bot className="w-5 h-5 text-white" />
+                          <Bot className="w-5 h-5 text-white" strokeWidth={2} />
                         ) : (
-                          <UserIcon className="w-5 h-5 text-white" />
+                          <UserIcon className="w-5 h-5 text-white" strokeWidth={2} />
                         )}
                       </div>
-                      <div className={`flex-1 rounded-2xl px-5 py-3.5 shadow-md max-w-[85%] ${
+                      <div className={`flex-1 rounded-[1.25rem] px-5 py-4 shadow-md max-w-[85%] ${
                         message.type === 'ai'
-                          ? 'bg-white rounded-tl-none'
-                          : 'bg-primary-500 text-white rounded-tr-none'
+                          ? 'bg-white rounded-tl-sm border border-neutral-100'
+                          : 'bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-tr-sm'
                       }`}>
                         <p className={`leading-relaxed ${message.type === 'ai' ? 'text-neutral-700' : ''}`}>
                           {message.text}
@@ -172,23 +178,27 @@ export function AIAssistantShowcase() {
                 </div>
 
                 {/* Input */}
-                <div className="p-5 bg-white border-t border-neutral-200">
-                  <div className="flex gap-3">
+                <div className="p-6 bg-white border-t border-neutral-200/80">
+                  <div className="flex gap-4">
                     <input
                       type="text"
                       placeholder="Ask me anything..."
-                      className="flex-1 px-5 py-3.5 bg-neutral-50 border border-neutral-200 rounded-2xl focus:outline-none focus:border-primary-400 focus:bg-white transition-all shadow-sm"
+                      className="flex-1 px-6 py-4 bg-neutral-50/80 border border-neutral-200 rounded-[1.25rem] focus:outline-none focus:border-primary-400 focus:bg-white transition-all duration-300 shadow-sm focus:shadow-md font-light"
                       disabled
                     />
-                    <button className="w-14 h-14 bg-primary-500 hover:bg-primary-600 rounded-2xl flex items-center justify-center text-white transition-all shadow-lg hover:shadow-xl">
-                      <Send className="w-5 h-5" />
-                    </button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 rounded-[1.25rem] flex items-center justify-center text-white transition-all duration-300 shadow-lg hover:shadow-xl"
+                    >
+                      <Send className="w-6 h-6" strokeWidth={2} />
+                    </motion.button>
                   </div>
                 </div>
               </div>
 
               {/* Decorative Glow */}
-              <div className="absolute -inset-px bg-gradient-to-r from-primary-400/30 to-primary-600/30 rounded-3xl blur-2xl -z-10" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary-400/40 to-primary-600/40 rounded-[2rem] blur-3xl -z-10 opacity-60" />
             </div>
           </motion.div>
         </div>
