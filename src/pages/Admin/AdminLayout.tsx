@@ -3,13 +3,15 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { useAuth } from '@/hooks/useAuth';
 import { Bell, Search } from 'lucide-react';
 import { WebsiteContentProvider } from '@/contexts/WebsiteContentContext';
+import { AdvancedSettingsProvider } from '@/contexts/AdvancedSettingsContext';
 
 export function AdminLayout() {
   const { user } = useAuth();
 
   return (
     <WebsiteContentProvider>
-      <div className="flex min-h-screen bg-neutral-50">
+      <AdvancedSettingsProvider>
+        <div className="flex min-h-screen bg-neutral-50">
         <AdminSidebar />
 
         <div className="flex-1 flex flex-col">
@@ -56,6 +58,7 @@ export function AdminLayout() {
           </main>
         </div>
       </div>
+      </AdvancedSettingsProvider>
     </WebsiteContentProvider>
   );
 }

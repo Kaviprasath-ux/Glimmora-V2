@@ -11,6 +11,10 @@ import { AmenitiesManagementTab } from './tabs/AmenitiesManagementTab';
 import { ContentManagerTab } from './tabs/ContentManagerTab';
 import { MediaManagerTab } from './tabs/MediaManagerTab';
 import { PoliciesEditorTab } from './tabs/PoliciesEditorTab';
+import { PreCheckInSettingsTab } from './tabs/PreCheckInSettingsTab';
+import { BrandingSettingsTab } from './tabs/BrandingSettingsTab';
+import { EmailTemplatesTab } from './tabs/EmailTemplatesTab';
+import { PricingRulesTab } from './tabs/PricingRulesTab';
 import { SettingsTab } from './tabs/SettingsTab';
 
 export function AdminDashboard() {
@@ -28,6 +32,10 @@ export function AdminDashboard() {
           <Route path="content" element={<ContentManagerTab />} />
           <Route path="media" element={<MediaManagerTab />} />
           <Route path="policies" element={<PoliciesEditorTab />} />
+          <Route path="pre-checkin" element={<PreCheckInSettingsTab />} />
+          <Route path="branding" element={<BrandingSettingsTab />} />
+          <Route path="email-templates" element={<EmailTemplatesTab />} />
+          <Route path="pricing-rules" element={<PricingRulesTab />} />
           <Route path="settings" element={<SettingsTab />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
