@@ -8,6 +8,10 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  Sparkles,
+  FileText,
+  Image,
+  Scale,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -19,6 +23,10 @@ const navItems = [
   { to: '/admin/guests', icon: Users, label: 'Guests' },
   { to: '/admin/staff', icon: UserCog, label: 'Staff' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
+  { to: '/admin/amenities', icon: Sparkles, label: 'Amenities' },
+  { to: '/admin/content', icon: FileText, label: 'Content' },
+  { to: '/admin/media', icon: Image, label: 'Media' },
+  { to: '/admin/policies', icon: Scale, label: 'Policies' },
   { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ];
 
