@@ -52,7 +52,7 @@ export function FeaturesGrid() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
-    <section ref={ref} className="py-28 sm:py-36 bg-gradient-to-b from-white via-neutral-50/50 to-white">
+    <section ref={ref} className="pt-[100px] pb-28 sm:pb-36 bg-gradient-to-b from-white via-neutral-50/50 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div

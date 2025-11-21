@@ -1,14 +1,24 @@
 import { motion } from 'framer-motion';
-import { CheckCircle, Edit } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { usePreCheckIn } from '@/contexts/PreCheckInContext';
-import { format } from 'date-fns';
+import logo from '@/assets/logo.png';
 
 interface ReviewSubmitStepProps {
   onNext: () => void;
+  onPrevious?: () => void;
 }
 
-export function ReviewSubmitStep({ onNext }: ReviewSubmitStepProps) {
+export function ReviewSubmitStep({ onNext, onPrevious }: ReviewSubmitStepProps) {
+  const navigate = useNavigate();
   const { preCheckInData, updatePreCheckInData } = usePreCheckIn();
+
+  const handleLogoClick = () => {
+    const confirmed = window.confirm('Are you sure you want to cancel the pre-check-in? Your progress will be lost.');
+    if (confirmed) {
+      navigate('/');
+    }
+  };
 
   const handleSubmit = () => {
     // Simulate generating digital key
@@ -23,144 +33,200 @@ export function ReviewSubmitStep({ onNext }: ReviewSubmitStepProps) {
     onNext();
   };
 
-  const sections = [
-    {
-      title: 'Personal Information',
-      items: [
-        { label: 'Email', value: preCheckInData.personalInfo.email },
-        { label: 'Phone', value: preCheckInData.personalInfo.phone },
-        { label: 'Address', value: `${preCheckInData.personalInfo.address}, ${preCheckInData.personalInfo.city}` },
-      ],
-    },
-    {
-      title: 'Selected Room',
-      items: [
-        { label: 'Room Number', value: preCheckInData.selectedRoom?.number || 'Not selected' },
-        { label: 'Floor', value: preCheckInData.selectedRoom?.floor.toString() || '-' },
-        { label: 'View', value: preCheckInData.selectedRoom?.view || '-' },
-        { label: 'AI Match Score', value: preCheckInData.selectedRoom ? `${preCheckInData.selectedRoom.aiScore}%` : '-' },
-      ],
-    },
-    {
-      title: 'Travel Details',
-      items: [
-        { label: 'Arrival Time', value: preCheckInData.travelDetails.arrivalTime },
-        { label: 'Flight Number', value: preCheckInData.travelDetails.flightNumber || 'Not provided' },
-        { label: 'Purpose', value: preCheckInData.travelDetails.purpose },
-        { label: 'Transportation', value: preCheckInData.travelDetails.transportationNeeded ? 'Requested' : 'Not needed' },
-      ],
-    },
-    {
-      title: 'Preferences',
-      items: [
-        { label: 'Room Temperature', value: `${preCheckInData.preferences.temperature}°F` },
-        { label: 'Pillow Type', value: preCheckInData.preferences.pillowType.join(', ') || 'Default' },
-        { label: 'Minibar', value: preCheckInData.preferences.minibarPreferences.join(', ') || 'Default' },
-        { label: 'Dietary', value: preCheckInData.preferences.dietaryRestrictions.join(', ') || 'None' },
-      ],
-    },
+  const steps = [
+    { number: 1, label: 'Welcome', active: false },
+    { number: 2, label: 'Guest Details', active: false },
+    { number: 3, label: 'Room Preferences', active: false },
+    { number: 4, label: 'Verification', active: false },
+    { number: 5, label: 'Documents', active: false },
+    { number: 6, label: 'Payment Info', active: false },
+    { number: 7, label: 'Review', active: false },
+    { number: 8, label: 'Confirmation', active: true },
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-6"
-    >
-      {/* Header */}
-      <div className="bg-white rounded-2xl p-8 shadow-sm">
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Review Your Information</h2>
-        <p className="text-neutral-600">Please review all details before submitting</p>
-      </div>
+    <div className="flex min-h-screen bg-white">
+      {/* LEFT COLUMN - Vertical Stepper */}
+      <div className="w-[410px] min-h-screen px-12 py-12 border-r border-neutral-200 bg-white">
+        <div className="sticky top-12">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-20"
+          >
+            <img
+              src={logo}
+              alt="Glimmora"
+              className="h-10 w-auto cursor-pointer"
+              onClick={handleLogoClick}
+            />
+          </motion.div>
 
-      {/* Booking Info */}
-      <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-2xl p-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <div className="text-white/70 text-sm mb-1">Booking Number</div>
-            <div className="font-semibold text-lg">{preCheckInData.bookingNumber}</div>
-          </div>
-          <div>
-            <div className="text-white/70 text-sm mb-1">Room Type</div>
-            <div className="font-semibold text-lg">{preCheckInData.roomType}</div>
-          </div>
-          <div>
-            <div className="text-white/70 text-sm mb-1">Check-in</div>
-            <div className="font-semibold">
-              {format(new Date(preCheckInData.checkInDate), 'MMM dd, yyyy')}
-            </div>
-          </div>
-          <div>
-            <div className="text-white/70 text-sm mb-1">Check-out</div>
-            <div className="font-semibold">
-              {format(new Date(preCheckInData.checkOutDate), 'MMM dd, yyyy')}
-            </div>
-          </div>
-        </div>
-      </div>
+          {/* Vertical Stepper */}
+          <div className="space-y-0">
+            {steps.map((step, index) => (
+              <div key={step.number} className="flex items-start gap-4">
+                {/* Step Indicator Column */}
+                <div className="flex flex-col items-center">
+                  {/* Circle */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-all ${
+                      step.active
+                        ? 'bg-[#A57865] text-white'
+                        : 'bg-transparent text-neutral-400 border border-neutral-300'
+                    }`}
+                  >
+                    {step.active ? <div className="w-2 h-2 bg-white rounded-full" /> : step.number}
+                  </motion.div>
 
-      {/* Review Sections */}
-      {sections.map((section, index) => (
-        <motion.div
-          key={section.title}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className="bg-white rounded-2xl p-6 shadow-sm"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-neutral-900">{section.title}</h3>
-            <button className="text-primary-600 hover:text-primary-700 flex items-center gap-1 text-sm font-medium">
-              <Edit className="w-4 h-4" />
-              Edit
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {section.items.map((item) => (
-              <div key={item.label}>
-                <div className="text-sm text-neutral-600 mb-1">{item.label}</div>
-                <div className="font-medium text-neutral-900">{item.value}</div>
+                  {/* Connector Line */}
+                  {index < steps.length - 1 && (
+                    <div className="w-px h-10 bg-neutral-200 mt-1.5" />
+                  )}
+                </div>
+
+                {/* Step Label */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 + 0.1 }}
+                  className="pt-1 pb-8"
+                >
+                  <div
+                    className={`text-sm font-medium mb-1 ${
+                      step.active ? 'text-neutral-900' : 'text-neutral-500'
+                    }`}
+                  >
+                    {step.label}
+                  </div>
+                  {step.active && (
+                    <div className="text-xs text-neutral-500">
+                      Review and submit your information
+                    </div>
+                  )}
+                </motion.div>
               </div>
             ))}
           </div>
-        </motion.div>
-      ))}
-
-      {/* Special Requests */}
-      {(preCheckInData.specialRequests.requests ||
-        preCheckInData.specialRequests.earlyCheckIn ||
-        preCheckInData.specialRequests.lateCheckOut) && (
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-xl font-bold text-neutral-900 mb-4">Special Requests</h3>
-          {preCheckInData.specialRequests.requests && (
-            <div className="mb-4">
-              <div className="text-sm text-neutral-600 mb-1">Additional Requests</div>
-              <div className="text-neutral-900">{preCheckInData.specialRequests.requests}</div>
-            </div>
-          )}
-          <div className="flex gap-3">
-            {preCheckInData.specialRequests.earlyCheckIn && (
-              <span className="px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                Early Check-in
-              </span>
-            )}
-            {preCheckInData.specialRequests.lateCheckOut && (
-              <span className="px-3 py-1 bg-primary-100 text-primary-700 text-sm rounded-full">
-                Late Check-out
-              </span>
-            )}
-          </div>
         </div>
-      )}
+      </div>
 
-      {/* Submit Button */}
-      <button
-        onClick={handleSubmit}
-        className="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2"
-      >
-        <CheckCircle className="w-5 h-5" />
-        Submit Pre-Check-In
-      </button>
-    </motion.div>
+      {/* RIGHT COLUMN - Content Card */}
+      <div className="flex-1 flex items-start justify-center pt-16 px-16" style={{ backgroundColor: '#FAFAFA' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-lg"
+        >
+          {/* Previous Button */}
+          <button
+            onClick={onPrevious}
+            className="flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </button>
+
+          {/* Content Card */}
+          <div className="bg-white p-8 rounded-2xl border-2 border-neutral-200 shadow-lg">
+            {/* Header */}
+            <div className="mb-10">
+              <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
+                Review & Submit
+              </h1>
+              <p className="text-sm text-neutral-500">
+                Please review your information before submitting
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Personal Information */}
+              <div className="pb-6 border-b border-neutral-200">
+                <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                  Personal Information
+                </h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Email</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.personalInfo.email || 'Not provided'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Phone</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.personalInfo.phone || 'Not provided'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Travel Details */}
+              <div className="pb-6 border-b border-neutral-200">
+                <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                  Travel Details
+                </h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Arrival Time</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.travelDetails.arrivalTime || 'Not provided'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Transportation</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.travelDetails.transportationNeeded ? 'Requested' : 'Not needed'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Room Preferences */}
+              <div className="pb-6 border-b border-neutral-200">
+                <h3 className="text-sm font-semibold text-neutral-900 mb-3">
+                  Room Preferences
+                </h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Temperature</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.preferences.temperature}°F
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-600">Pillow Type</span>
+                    <span className="text-neutral-900 font-medium">
+                      {preCheckInData.preferences.pillowType.join(', ') || 'None'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              onClick={handleSubmit}
+              className="w-full py-2.5 text-white font-medium rounded-lg transition-all text-sm mt-6"
+              style={{
+                backgroundColor: '#A57865',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8E6554';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#A57865';
+              }}
+            >
+              Complete Pre-Check-In
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }

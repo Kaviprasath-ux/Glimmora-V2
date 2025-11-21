@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Lock, Eye, EyeOff, Sparkles, AlertCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import logo from '@/assets/logo.png';
 
 const loginSchema = z.object({
   email: z.string().email('Valid email required'),
@@ -47,14 +48,12 @@ export function LoginPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-7 h-7 text-white" />
-            </div>
-            <div className="text-left">
-              <div className="text-2xl font-bold text-neutral-900">Glimmora</div>
-              <div className="text-xs text-neutral-600 -mt-1">Hotel & Suites</div>
-            </div>
+          <Link to="/" className="inline-flex items-center mb-4">
+            <img
+              src={logo}
+              alt="Glimmora"
+              className="h-8 w-auto"
+            />
           </Link>
           <h1 className="text-3xl font-bold text-neutral-900 mb-2">Welcome Back</h1>
           <p className="text-neutral-600">Sign in to your account to continue</p>

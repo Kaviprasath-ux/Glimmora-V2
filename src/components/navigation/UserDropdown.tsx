@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, ClipboardCheck, Settings, LogOut } from 'lucide-react';
+import { Calendar, ClipboardCheck, Settings, LogOut, ChevronDown, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
 export function UserDropdown() {
@@ -30,6 +30,7 @@ export function UserDropdown() {
   if (!user) return null;
 
   const menuItems = [
+    { icon: LayoutDashboard, label: 'My Dashboard', path: '/dashboard' },
     { icon: Calendar, label: 'My Bookings', path: '/dashboard?tab=bookings' },
     { icon: ClipboardCheck, label: 'Pre-Check-In', path: '/pre-checkin', highlight: true },
     { icon: Settings, label: 'Account Settings', path: '/dashboard?tab=security' },
@@ -60,6 +61,12 @@ export function UserDropdown() {
         <span className="hidden md:inline text-sm font-medium text-neutral-900">
           {user.fullName.split(' ')[0]}
         </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className="w-4 h-4 text-neutral-600" strokeWidth={2} />
+        </motion.div>
       </button>
 
       {/* Dropdown Menu */}

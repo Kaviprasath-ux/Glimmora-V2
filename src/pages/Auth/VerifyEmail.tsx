@@ -5,6 +5,7 @@ import { Button, Card } from '@/components/ui';
 import { ROUTES } from '@/config/constants';
 import { apiClient } from '@/api/client';
 import toast from 'react-hot-toast';
+import logo from '@/assets/logo.png';
 
 export const VerifyEmail = () => {
   const navigate = useNavigate();

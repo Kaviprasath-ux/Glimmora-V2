@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply bg-white text-neutral-900 antialiased;
+    @apply bg-gradient-to-br from-aurora-50 via-sunset-50 to-midnight-50 text-neutral-900 antialiased;
   }
 
   html {
@@ -55,6 +55,16 @@
   /* Custom utilities */
   .text-balance {
     text-wrap: balance;
+  }
+
+  .glow-card {
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  }
+
+  .sparkle-border {
+    border-image: linear-gradient(120deg, #ff6742, #60adff) 1 / 1 / 0 stretch;
   }
 
   /* Container queries */

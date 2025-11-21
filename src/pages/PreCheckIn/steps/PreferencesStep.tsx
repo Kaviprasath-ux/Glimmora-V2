@@ -1,17 +1,26 @@
 import { motion } from 'framer-motion';
-import { Minus, Plus } from 'lucide-react';
+import { Minus, Plus, Thermometer, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { usePreCheckIn } from '@/contexts/PreCheckInContext';
+import logo from '@/assets/logo.png';
 
 interface PreferencesStepProps {
   onNext: () => void;
+  onPrevious?: () => void;
 }
 
-export function PreferencesStep({ onNext }: PreferencesStepProps) {
+export function PreferencesStep({ onNext, onPrevious }: PreferencesStepProps) {
+  const navigate = useNavigate();
   const { preCheckInData, updatePreCheckInData } = usePreCheckIn();
 
+  const handleLogoClick = () => {
+    const confirmed = window.confirm('Are you sure you want to cancel the pre-check-in? Your progress will be lost.');
+    if (confirmed) {
+      navigate('/');
+    }
+  };
+
   const pillowOptions = ['Soft', 'Medium', 'Firm', 'Memory Foam'];
-  const minibarOptions = ['Still Water', 'Sparkling Water', 'Soft Drinks', 'Snacks', 'Wine'];
-  const dietaryOptions = ['Vegetarian', 'Vegan', 'Gluten-Free', 'Dairy-Free', 'Halal', 'Kosher'];
 
   const toggleOption = (category: 'pillowType' | 'minibarPreferences' | 'dietaryRestrictions', option: string) => {
     const current = preCheckInData.preferences[category];
@@ -31,118 +40,192 @@ export function PreferencesStep({ onNext }: PreferencesStepProps) {
     });
   };
 
+  const steps = [
+    { number: 1, label: 'Welcome', active: false },
+    { number: 2, label: 'Guest Details', active: false },
+    { number: 3, label: 'Room Preferences', active: false },
+    { number: 4, label: 'Verification', active: false },
+    { number: 5, label: 'Documents', active: false },
+    { number: 6, label: 'Payment Info', active: true },
+    { number: 7, label: 'Review', active: false },
+    { number: 8, label: 'Confirmation', active: false },
+  ];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl p-8 shadow-sm"
-    >
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Room Preferences</h2>
-        <p className="text-neutral-600">Customize your stay experience</p>
-      </div>
+    <div className="flex min-h-screen bg-white">
+      {/* LEFT COLUMN - Vertical Stepper */}
+      <div className="w-[410px] min-h-screen px-12 py-12 border-r border-neutral-200 bg-white">
+        <div className="sticky top-12">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-20"
+          >
+            <img
+              src={logo}
+              alt="Glimmora"
+              className="h-10 w-auto cursor-pointer"
+              onClick={handleLogoClick}
+            />
+          </motion.div>
 
-      <div className="space-y-8">
-        {/* Temperature */}
-        <div>
-          <label className="block text-sm font-semibold text-neutral-700 mb-4">
-            Preferred Room Temperature
-          </label>
-          <div className="flex items-center justify-center gap-6 p-6 bg-neutral-50 rounded-xl">
-            <button
-              onClick={() => updateTemperature(-1)}
-              className="w-12 h-12 rounded-full bg-white border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 transition-all"
-            >
-              <Minus className="w-5 h-5" />
-            </button>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-primary-600">
-                {preCheckInData.preferences.temperature}°
+          {/* Vertical Stepper */}
+          <div className="space-y-0">
+            {steps.map((step, index) => (
+              <div key={step.number} className="flex items-start gap-4">
+                {/* Step Indicator Column */}
+                <div className="flex flex-col items-center">
+                  {/* Circle */}
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-all ${
+                      step.active
+                        ? 'bg-[#A57865] text-white'
+                        : 'bg-transparent text-neutral-400 border border-neutral-300'
+                    }`}
+                  >
+                    {step.active ? <div className="w-2 h-2 bg-white rounded-full" /> : step.number}
+                  </motion.div>
+
+                  {/* Connector Line */}
+                  {index < steps.length - 1 && (
+                    <div className="w-px h-10 bg-neutral-200 mt-1.5" />
+                  )}
+                </div>
+
+                {/* Step Label */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 + 0.1 }}
+                  className="pt-1 pb-8"
+                >
+                  <div
+                    className={`text-sm font-medium mb-1 ${
+                      step.active ? 'text-neutral-900' : 'text-neutral-500'
+                    }`}
+                  >
+                    {step.label}
+                  </div>
+                  {step.active && (
+                    <div className="text-xs text-neutral-500">
+                      Customize your stay experience
+                    </div>
+                  )}
+                </motion.div>
               </div>
-              <div className="text-sm text-neutral-600 mt-1">Fahrenheit</div>
-            </div>
-            <button
-              onClick={() => updateTemperature(1)}
-              className="w-12 h-12 rounded-full bg-white border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 transition-all"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Pillow Type */}
-        <div>
-          <label className="block text-sm font-semibold text-neutral-700 mb-3">
-            Pillow Preferences (Select all that apply)
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {pillowOptions.map((option) => (
-              <button
-                key={option}
-                onClick={() => toggleOption('pillowType', option)}
-                className={`p-4 border-2 rounded-xl transition-all text-left ${
-                  preCheckInData.preferences.pillowType.includes(option)
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-neutral-300 hover:border-primary-300'
-                }`}
-              >
-                <span className="font-semibold">{option}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Minibar */}
-        <div>
-          <label className="block text-sm font-semibold text-neutral-700 mb-3">
-            Minibar Preferences (Optional)
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {minibarOptions.map((option) => (
-              <button
-                key={option}
-                onClick={() => toggleOption('minibarPreferences', option)}
-                className={`p-4 border-2 rounded-xl transition-all text-left ${
-                  preCheckInData.preferences.minibarPreferences.includes(option)
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-neutral-300 hover:border-primary-300'
-                }`}
-              >
-                <span className="font-semibold">{option}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Dietary Restrictions */}
-        <div>
-          <label className="block text-sm font-semibold text-neutral-700 mb-3">
-            Dietary Restrictions (Optional)
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {dietaryOptions.map((option) => (
-              <button
-                key={option}
-                onClick={() => toggleOption('dietaryRestrictions', option)}
-                className={`p-4 border-2 rounded-xl transition-all text-left ${
-                  preCheckInData.preferences.dietaryRestrictions.includes(option)
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-neutral-300 hover:border-primary-300'
-                }`}
-              >
-                <span className="font-semibold">{option}</span>
-              </button>
             ))}
           </div>
         </div>
       </div>
 
-      <button
-        onClick={onNext}
-        className="w-full mt-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg rounded-xl transition-all"
-      >
-        Continue
-      </button>
-    </motion.div>
+      {/* RIGHT COLUMN - Content Card */}
+      <div className="flex-1 flex items-start justify-center pt-16 px-16" style={{ backgroundColor: '#FAFAFA' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-lg"
+        >
+          {/* Previous Button */}
+          <button
+            onClick={onPrevious}
+            className="flex items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </button>
+
+          {/* Content Card */}
+          <div className="bg-white p-8 rounded-2xl border-2 border-neutral-200 shadow-lg">
+            {/* Header */}
+            <div className="mb-10">
+              <h1 className="text-2xl font-semibold text-neutral-900 mb-2">
+                Room Preferences
+              </h1>
+              <p className="text-sm text-neutral-500">
+                Customize your stay experience
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Temperature */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Thermometer className="w-4 h-4 text-[#A57865]" />
+                  <label className="block text-sm font-medium text-neutral-700">
+                    Preferred Room Temperature
+                  </label>
+                </div>
+                <div className="flex items-center justify-center gap-6 p-6 bg-neutral-50 rounded-lg border border-neutral-200">
+                  <button
+                    onClick={() => updateTemperature(-1)}
+                    className="w-10 h-10 rounded-full bg-white border-2 border-neutral-300 flex items-center justify-center hover:border-[#A57865] transition-all"
+                  >
+                    <Minus className="w-4 h-4 text-neutral-700" />
+                  </button>
+                  <div className="text-center">
+                    <div className="text-4xl font-semibold text-neutral-900">
+                      {preCheckInData.preferences.temperature}°
+                    </div>
+                    <div className="text-xs text-neutral-600 mt-1">Fahrenheit</div>
+                  </div>
+                  <button
+                    onClick={() => updateTemperature(1)}
+                    className="w-10 h-10 rounded-full bg-white border-2 border-neutral-300 flex items-center justify-center hover:border-[#A57865] transition-all"
+                  >
+                    <Plus className="w-4 h-4 text-neutral-700" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Pillow Type */}
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-3">
+                  Pillow Preferences
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  {pillowOptions.map((option) => {
+                    const isSelected = preCheckInData.preferences.pillowType.includes(option);
+                    return (
+                      <button
+                        key={option}
+                        onClick={() => toggleOption('pillowType', option)}
+                        className={`p-4 border-2 rounded-lg transition-all text-sm font-medium ${
+                          isSelected
+                            ? 'border-[#A57865] bg-[#A57865]/5 text-neutral-900'
+                            : 'border-neutral-200 hover:border-neutral-300 text-neutral-700'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                onClick={onNext}
+                className="w-full py-2.5 text-white font-medium rounded-lg transition-all text-sm mt-6"
+                style={{
+                  backgroundColor: '#A57865',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#8E6554';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#A57865';
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }

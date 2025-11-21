@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { Room } from '@/api/types/booking.types';
 
 interface BookingData {
@@ -27,6 +27,7 @@ interface BookingData {
     country: string;
   };
   bookingNumber?: string;
+  datesFromUrl?: boolean; // Track if dates came from URL parameters
 }
 
 interface BookingContextType {
@@ -63,20 +64,21 @@ const initialBookingData: BookingData = {
     zipCode: '',
     country: '',
   },
+  datesFromUrl: false,
 };
 
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [bookingData, setBookingData] = useState<BookingData>(initialBookingData);
 
-  const updateBookingData = (data: Partial<BookingData>) => {
+  const updateBookingData = useCallback((data: Partial<BookingData>) => {
     setBookingData((prev) => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const resetBooking = () => {
+  const resetBooking = useCallback(() => {
     setBookingData(initialBookingData);
-  };
+  }, []);
 
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     if (!bookingData.room || !bookingData.checkIn || !bookingData.checkOut) {
       return { subtotal: 0, tax: 0, serviceFee: 0, total: 0, nights: 0 };
     }
@@ -91,7 +93,7 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     const total = subtotal + tax + serviceFee;
 
     return { subtotal, tax, serviceFee, total, nights };
-  };
+  }, [bookingData.room, bookingData.checkIn, bookingData.checkOut]);
 
   return (
     <BookingContext.Provider value={{ bookingData, updateBookingData, resetBooking, calculateTotal }}>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import { Calendar, Users, Search, ChevronDown, Plus, Minus, X } from 'lucide-react';
+import { Search, ChevronDown, Plus, Minus, X } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface SearchWidgetProps {
@@ -60,152 +60,156 @@ export function RoomsSearchWidget({ onSearch }: SearchWidgetProps) {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl p-4 shadow-lg border border-neutral-200"
+      className="overflow-visible"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Search Form */}
+      <div className="space-y-4">
         {/* Check-in Date */}
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-2">
-            Check-in
+          <label className="block text-xs font-medium text-neutral-700 mb-2">
+            Check-In Date
           </label>
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" />
-            <input
-              type="date"
-              min={today}
-              value={searchData.checkIn}
-              onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
-              className="w-full pl-10 pr-3 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all"
-            />
-          </div>
+          <input
+            type="date"
+            value={searchData.checkIn}
+            onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
+            min={today}
+            placeholder="Add Date"
+            className="w-full px-3 py-2.5 bg-white rounded-lg text-sm text-neutral-900 border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
+          />
         </div>
 
         {/* Check-out Date */}
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-2">
-            Check-out
+          <label className="block text-xs font-medium text-neutral-700 mb-2">
+            Check-Out Date
           </label>
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" />
-            <input
-              type="date"
-              min={minCheckOut}
-              value={searchData.checkOut}
-              onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
-              className="w-full pl-10 pr-3 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all"
-            />
-          </div>
+          <input
+            type="date"
+            value={searchData.checkOut}
+            onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
+            min={minCheckOut}
+            placeholder="Add Date"
+            className="w-full px-3 py-2.5 bg-white rounded-lg text-sm text-neutral-900 border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
+          />
         </div>
 
         {/* Guests Dropdown */}
         <div className="relative">
-          <label className="block text-xs font-semibold text-neutral-700 mb-2">
+          <label className="block text-xs font-medium text-neutral-700 mb-2">
             Guests
           </label>
           <button
             type="button"
             onClick={() => setShowGuestsDropdown(!showGuestsDropdown)}
-            className="w-full px-4 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all flex items-center justify-between"
+            className="w-full px-3 py-2.5 text-left bg-white rounded-lg border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
           >
-            <div className="flex items-center gap-2">
-              <Users className="w-5 h-5 text-neutral-400" />
-              <span className="font-medium">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-neutral-900">
                 {totalGuests} {totalGuests === 1 ? 'Guest' : 'Guests'}
               </span>
+              <ChevronDown className={`w-4 h-4 text-neutral-600 transition-transform duration-300 ${showGuestsDropdown ? 'rotate-180' : ''}`} />
             </div>
-            <ChevronDown className={`w-5 h-5 text-neutral-400 transition-transform ${showGuestsDropdown ? 'rotate-180' : ''}`} />
           </button>
 
-          {/* Guests Dropdown Menu */}
-          {showGuestsDropdown && (
-            <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setShowGuestsDropdown(false)}
-              />
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-neutral-200 p-4 z-20"
-              >
-                {/* Adults */}
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="font-semibold text-neutral-900">Adults</div>
-                    <div className="text-sm text-neutral-600">Age 13+</div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateGuests('adults', -1)}
-                      disabled={searchData.adults <= 1}
-                      className="w-8 h-8 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-6 text-center font-semibold">
-                      {searchData.adults}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => updateGuests('adults', 1)}
-                      className="w-8 h-8 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 transition-all"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Children */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold text-neutral-900">Children</div>
-                    <div className="text-sm text-neutral-600">Age 0-12</div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => updateGuests('children', -1)}
-                      disabled={searchData.children <= 0}
-                      className="w-8 h-8 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-6 text-center font-semibold">
-                      {searchData.children}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => updateGuests('children', 1)}
-                      className="w-8 h-8 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 transition-all"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <button
+            {/* Guests Dropdown Menu */}
+            {showGuestsDropdown && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
                   onClick={() => setShowGuestsDropdown(false)}
-                  className="w-full mt-4 py-2 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-all"
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg border-2 border-neutral-300 p-4 z-20"
                 >
-                  Done
-                </button>
-              </motion.div>
-            </>
-          )}
+                  {/* Adults */}
+                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-neutral-200">
+                    <div>
+                      <div className="font-medium text-neutral-900 text-sm">Adults</div>
+                      <div className="text-xs text-neutral-500 mt-0.5">Age 13+</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <motion.button
+                        type="button"
+                        onClick={() => updateGuests('adults', -1)}
+                        disabled={searchData.adults <= 1}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Minus className="w-3.5 h-3.5 text-neutral-700" />
+                      </motion.button>
+                      <span className="w-6 text-center font-medium text-neutral-900 text-sm">
+                        {searchData.adults}
+                      </span>
+                      <motion.button
+                        type="button"
+                        onClick={() => updateGuests('adults', 1)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 transition-all"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-neutral-700" />
+                      </motion.button>
+                    </div>
+                  </div>
+
+                  {/* Children */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <div className="font-medium text-neutral-900 text-sm">Children</div>
+                      <div className="text-xs text-neutral-500 mt-0.5">Age 0-12</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <motion.button
+                        type="button"
+                        onClick={() => updateGuests('children', -1)}
+                        disabled={searchData.children <= 0}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      >
+                        <Minus className="w-3.5 h-3.5 text-neutral-700" />
+                      </motion.button>
+                      <span className="w-6 text-center font-medium text-neutral-900 text-sm">
+                        {searchData.children}
+                      </span>
+                      <motion.button
+                        type="button"
+                        onClick={() => updateGuests('children', 1)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="w-8 h-8 rounded-full border border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 transition-all"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-neutral-700" />
+                      </motion.button>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setShowGuestsDropdown(false)}
+                    className="w-full py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-all"
+                  >
+                    Done
+                  </button>
+                </motion.div>
+              </>
+            )}
         </div>
 
         {/* Search Button */}
-        <div className="flex items-end">
-          <button
-            onClick={handleSearch}
-            disabled={!searchData.checkIn || !searchData.checkOut}
-            className="w-full py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
-          >
-            <Search className="w-5 h-5" />
-            <span className="hidden sm:inline">Search</span>
-          </button>
-        </div>
+        <button
+          onClick={handleSearch}
+          disabled={!searchData.checkIn || !searchData.checkOut}
+          className="w-full py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-2"
+        >
+          <Search className="w-4 h-4" />
+          <span>Search</span>
+        </button>
       </div>
 
       {/* Active Search Info */}
@@ -213,31 +217,31 @@ export function RoomsSearchWidget({ onSearch }: SearchWidgetProps) {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="mt-4 pt-4 border-t border-neutral-200 flex items-center justify-between"
+          className="pt-4 mt-4 border-t border-neutral-200"
         >
-          <div className="text-sm text-neutral-600">
-            Showing available rooms for{' '}
-            <span className="font-semibold text-neutral-900">
-              {new Date(searchData.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              {' - '}
-              {new Date(searchData.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </span>
-            {' • '}
-            <span className="font-semibold text-neutral-900">
-              {totalGuests} {totalGuests === 1 ? 'guest' : 'guests'}
-            </span>
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <div className="text-xs text-neutral-600 flex-1">
+              <div className="font-medium text-neutral-900 mb-1">
+                {new Date(searchData.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {' - '}
+                {new Date(searchData.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </div>
+              <div>
+                {totalGuests} {totalGuests === 1 ? 'guest' : 'guests'}
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setSearchData({ checkIn: '', checkOut: '', adults: 1, children: 0 });
+                navigate('/rooms', { replace: true });
+                onSearch({ checkIn: '', checkOut: '', adults: 1, children: 0 });
+              }}
+              className="text-xs text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1 hover:bg-primary-50 px-2 py-1 rounded transition-all"
+            >
+              <X className="w-3 h-3" />
+              Clear
+            </button>
           </div>
-          <button
-            onClick={() => {
-              setSearchData({ checkIn: '', checkOut: '', adults: 1, children: 0 });
-              navigate('/rooms', { replace: true });
-              onSearch({ checkIn: '', checkOut: '', adults: 1, children: 0 });
-            }}
-            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
-          >
-            <X className="w-4 h-4" />
-            Clear
-          </button>
         </motion.div>
       )}
     </motion.div>

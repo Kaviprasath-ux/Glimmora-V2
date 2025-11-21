@@ -1,15 +1,17 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Navigation } from '../navigation/Navigation';
-import { Footer } from './Footer';
 
 export const PublicLayout = () => {
+  const location = useLocation();
+  const isPreCheckIn = location.pathname === '/pre-checkin';
+  const isBookingFlow = location.pathname.startsWith('/booking');
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navigation />
+      {!isPreCheckIn && !isBookingFlow && <Navigation />}
       <main className="flex-grow">
         <Outlet />
       </main>
-      <Footer />
     </div>
   );
 };

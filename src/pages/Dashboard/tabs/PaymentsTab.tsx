@@ -89,63 +89,49 @@ export function PaymentsTab() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
-      >
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Payment Methods</h2>
-        <p className="text-neutral-600">Manage your saved payment methods and billing history</p>
-      </motion.div>
-
+    <div className="max-w-4xl space-y-6">
       {/* Saved Payment Methods */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <CreditCard className="w-6 h-6 text-primary-600" />
-            <h3 className="text-xl font-bold text-neutral-900">Saved Cards</h3>
-          </div>
+          <h3 className="text-lg font-semibold text-neutral-900">Saved Cards</h3>
           <button
             onClick={handleAddCard}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors text-sm"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4" />
             Add Card
           </button>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {paymentMethods.map((method, index) => (
             <motion.div
               key={method.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.2 }}
-              className="relative p-6 border-2 border-neutral-200 rounded-xl hover:border-primary-300 transition-all"
+              transition={{ delay: index * 0.05 + 0.1 }}
+              className="relative p-4 border border-neutral-200 rounded-lg hover:border-neutral-300 transition-colors"
             >
               {method.isDefault && (
-                <span className="absolute top-4 right-4 px-3 py-1 bg-primary-100 text-primary-700 text-xs font-bold rounded-full">
+                <span className="absolute top-4 right-4 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded">
                   DEFAULT
                 </span>
               )}
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center text-2xl">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center text-xl">
                     {cardIcons[method.type]}
                   </div>
                   <div>
-                    <div className="font-semibold text-neutral-900 capitalize mb-1">
+                    <div className="font-medium text-neutral-900 capitalize text-sm">
                       {method.type} •••• {method.last4}
                     </div>
-                    <div className="text-sm text-neutral-600">
+                    <div className="text-xs text-neutral-500">
                       Expires {method.expiryMonth.toString().padStart(2, '0')}/{method.expiryYear}
                     </div>
                   </div>
@@ -153,15 +139,15 @@ export function PaymentsTab() {
 
                 <button
                   onClick={handleRemoveCard}
-                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   disabled={method.isDefault}
                 >
-                  <Trash2 className="w-5 h-5" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
 
               {!method.isDefault && (
-                <button className="mt-4 text-sm text-primary-600 hover:text-primary-700 font-medium">
+                <button className="mt-3 text-xs text-primary-600 hover:text-primary-700 font-medium">
                   Set as default
                 </button>
               )}
@@ -169,8 +155,8 @@ export function PaymentsTab() {
           ))}
         </div>
 
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-          <p className="text-sm text-blue-900">
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs text-blue-900">
             <strong>🔒 Secure:</strong> All payment information is encrypted and stored securely. We never store your full card number.
           </p>
         </div>
@@ -180,48 +166,45 @@ export function PaymentsTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.15 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Receipt className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Billing History</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-6">Billing History</h3>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {billingHistory.map((transaction, index) => (
             <motion.div
               key={transaction.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.4 }}
-              className="p-6 border-2 border-neutral-200 rounded-xl hover:border-primary-300 transition-all"
+              transition={{ delay: index * 0.05 + 0.2 }}
+              className="p-4 border border-neutral-200 rounded-lg hover:border-neutral-300 transition-colors"
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start justify-between mb-3 pb-3 border-b border-neutral-100">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-semibold text-neutral-900">{transaction.description}</h4>
-                    <span className={`px-3 py-1 ${statusColors[transaction.status]} text-xs font-bold rounded-full uppercase`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="font-medium text-neutral-900 text-sm">{transaction.description}</h4>
+                    <span className={`px-2 py-0.5 ${statusColors[transaction.status]} text-xs font-medium rounded capitalize`}>
                       {transaction.status}
                     </span>
                   </div>
-                  <div className="text-sm text-neutral-600">
+                  <div className="text-xs text-neutral-500">
                     {format(transaction.date, 'MMM dd, yyyy')}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-neutral-900">
+                  <div className="text-lg font-bold text-neutral-900">
                     ${transaction.amount.toLocaleString()}
                   </div>
                 </div>
               </div>
 
-              <div className="flex gap-3">
-                <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-all text-sm">
-                  <Download className="w-4 h-4" />
+              <div className="flex gap-2">
+                <button className="flex items-center gap-2 px-3 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors text-xs">
+                  <Download className="w-3.5 h-3.5" />
                   Download Invoice
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-neutral-300 hover:border-primary-500 text-neutral-900 font-semibold rounded-lg transition-all text-sm">
+                <button className="flex items-center gap-2 px-3 py-2 bg-white border border-neutral-300 hover:border-neutral-400 text-neutral-900 font-medium rounded-lg transition-colors text-xs">
                   View Details
                 </button>
               </div>
@@ -234,18 +217,18 @@ export function PaymentsTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-2xl p-8"
+        transition={{ delay: 0.25 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-white/70 mb-2">Total Spent (All Time)</div>
-            <div className="text-4xl font-bold">
+            <div className="text-sm text-neutral-500 mb-1">Total Spent (All Time)</div>
+            <div className="text-3xl font-bold text-neutral-900">
               ${billingHistory.reduce((sum, t) => sum + t.amount, 0).toLocaleString()}
             </div>
           </div>
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Receipt className="w-8 h-8 text-white" />
+          <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+            <Receipt className="w-6 h-6 text-neutral-600" />
           </div>
         </div>
       </motion.div>

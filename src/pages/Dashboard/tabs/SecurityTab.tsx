@@ -74,85 +74,73 @@ export function SecurityTab() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
-      >
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Security Settings</h2>
-        <p className="text-neutral-600">Manage your account security and active sessions</p>
-      </motion.div>
-
+    <div className="max-w-4xl space-y-6">
       {/* Change Password */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Lock className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Change Password</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-6">Change Password</h3>
 
-        <form onSubmit={handleSubmit(onPasswordSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onPasswordSubmit)} className="space-y-5">
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-2">
-              Current Password *
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Current Password
             </label>
             <input
               {...register('currentPassword')}
               type="password"
-              className="w-full px-4 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all"
+              className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
               placeholder="Enter current password"
             />
             {errors.currentPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.currentPassword.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.currentPassword.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-2">
-              New Password *
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              New Password
             </label>
             <input
               {...register('newPassword')}
               type="password"
-              className="w-full px-4 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all"
+              className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
               placeholder="Enter new password"
             />
             {errors.newPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.newPassword.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.newPassword.message}</p>
             )}
-            <p className="mt-1 text-sm text-neutral-600">
+            <p className="mt-1 text-xs text-neutral-500">
               Must be at least 8 characters long
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-2">
-              Confirm New Password *
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
+              Confirm New Password
             </label>
             <input
               {...register('confirmPassword')}
               type="password"
-              className="w-full px-4 py-3 border-2 border-neutral-300 rounded-xl focus:outline-none focus:border-primary-500 transition-all"
+              className="w-full px-4 py-2.5 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm"
               placeholder="Confirm new password"
             />
             {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+              <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
             )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full md:w-auto px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
-          >
-            <Save className="w-5 h-5" />
-            Update Password
-          </button>
+          <div className="flex justify-end pt-2">
+            <button
+              type="submit"
+              className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 text-sm"
+            >
+              <Save className="w-4 h-4" />
+              Update Password
+            </button>
+          </div>
         </form>
       </motion.div>
 
@@ -160,28 +148,25 @@ export function SecurityTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.1 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Shield className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Two-Factor Authentication</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Two-Factor Authentication</h3>
 
-        <div className="flex items-start gap-4 p-4 bg-neutral-50 rounded-xl mb-6">
-          <Smartphone className="w-6 h-6 text-neutral-600 mt-1 flex-shrink-0" />
+        <div className="flex items-start gap-3 p-4 bg-neutral-50 rounded-lg mb-4">
+          <Smartphone className="w-5 h-5 text-neutral-600 mt-0.5 flex-shrink-0" />
           <div className="flex-1">
-            <h4 className="font-semibold text-neutral-900 mb-2">Authenticator App</h4>
-            <p className="text-sm text-neutral-600 mb-4">
+            <h4 className="font-medium text-neutral-900 mb-1 text-sm">Authenticator App</h4>
+            <p className="text-xs text-neutral-600 mb-3">
               Add an extra layer of security to your account by enabling two-factor authentication using an authenticator app.
             </p>
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm font-medium rounded-full">
+              <span className="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-medium rounded">
                 Not Enabled
               </span>
               <button
                 onClick={handleEnable2FA}
-                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                className="text-xs text-primary-600 hover:text-primary-700 font-medium"
               >
                 Enable 2FA →
               </button>
@@ -189,8 +174,8 @@ export function SecurityTab() {
           </div>
         </div>
 
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-          <p className="text-sm text-blue-900">
+        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-xs text-blue-900">
             <strong>🔒 Recommended:</strong> Enable 2FA to protect your account from unauthorized access, even if your password is compromised.
           </p>
         </div>
@@ -200,41 +185,38 @@ export function SecurityTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.2 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Monitor className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Active Sessions</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-6">Active Sessions</h3>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {activeSessions.map((session, index) => (
             <motion.div
               key={session.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.4 }}
-              className="p-6 border-2 border-neutral-200 rounded-xl hover:border-primary-300 transition-all"
+              transition={{ delay: index * 0.05 + 0.25 }}
+              className="p-4 border border-neutral-200 rounded-lg hover:border-neutral-300 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <h4 className="font-semibold text-neutral-900">{session.device}</h4>
+                  <div className="flex items-center gap-2 mb-3">
+                    <h4 className="font-medium text-neutral-900 text-sm">{session.device}</h4>
                     {session.current && (
-                      <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
+                      <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded">
                         CURRENT
                       </span>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-neutral-600">
-                      <MapPin className="w-4 h-4" />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-xs text-neutral-600">
+                      <MapPin className="w-3.5 h-3.5" />
                       <span>{session.location}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-neutral-600">
-                      <Clock className="w-4 h-4" />
+                    <div className="flex items-center gap-2 text-xs text-neutral-600">
+                      <Clock className="w-3.5 h-3.5" />
                       <span>
                         Last active: {session.current ? 'Now' : format(session.lastActive, 'MMM dd, yyyy HH:mm')}
                       </span>
@@ -245,7 +227,7 @@ export function SecurityTab() {
                 {!session.current && (
                   <button
                     onClick={handleTerminateSession}
-                    className="px-4 py-2 text-red-600 hover:bg-red-50 font-semibold rounded-lg transition-all"
+                    className="px-3 py-2 text-red-600 hover:bg-red-50 font-medium rounded-lg transition-colors text-xs"
                   >
                     Terminate
                   </button>
@@ -255,8 +237,8 @@ export function SecurityTab() {
           ))}
         </div>
 
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-          <p className="text-sm text-yellow-900">
+        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <p className="text-xs text-yellow-900">
             <strong>⚠️ Notice:</strong> If you see any suspicious activity or unfamiliar devices, terminate the session immediately and change your password.
           </p>
         </div>

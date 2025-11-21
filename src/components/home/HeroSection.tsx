@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Users, ChevronDown, Plus, Minus } from 'lucide-react';
+import { ChevronDown, Plus, Minus, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function HeroSection() {
@@ -8,107 +8,115 @@ export function HeroSection() {
   const [searchData, setSearchData] = useState({
     checkIn: '',
     checkOut: '',
-    adults: 1,
+    adults: 2,
     children: 0,
   });
   const [showGuestsDropdown, setShowGuestsDropdown] = useState(false);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0">
+    <section className="relative overflow-visible pb-32 sm:pb-40">
+      {/* Background - Ends at middle of search card */}
+      <div className="absolute inset-x-0 top-0 h-[70vh] overflow-hidden">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=2070&auto=format&fit=crop)'
+          }}
+        />
+
+        {/* Black Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/70" />
+
+        {/* Additional subtle gradient for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24">
+        {/* Hero Content - Two Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-12 pb-16">
+          {/* Left Column - Headline */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+              Discover Your Perfect Stay. One Search.
+            </h1>
+          </motion.div>
+
+          {/* Right Column - Promotional Text */}
         <motion.div
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-0"
-        >
-          {/* Background Image */}
-          <img
-            src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1920&q=80"
-            alt="Luxury Hotel Room"
-            className="w-full h-full object-cover"
-          />
-          {/* Dark Overlay - 50% black */}
-          <div className="absolute inset-0 bg-black/50" />
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-white/90 text-lg leading-relaxed"
+          >
+            <p>
+              Experience luxury accommodations with AI-powered recommendations. Book now and save 15% or more when you reserve by January 2025. Not sure where to go? Use our intelligent search to find the perfect hotel for your needs.
+            </p>
         </motion.div>
       </div>
 
-      {/* Content - Centered */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* Search Card */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-5xl mx-auto"
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="bg-white rounded-2xl shadow-2xl overflow-hidden max-w-7xl mx-auto"
         >
-          {/* Main Headline - Large White Text */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-10 leading-[1.08] tracking-tight">
-            <span className="drop-shadow-[0_8px_32px_rgba(0,0,0,0.9)]">
-              Discover Your Perfect
-            </span>
-            <br />
-            <span className="bg-gradient-to-r from-white via-primary-100 to-primary-300 bg-clip-text text-transparent drop-shadow-[0_8px_32px_rgba(0,0,0,0.9)]">
-              Stay Anywhere
-            </span>
-          </h1>
+          {/* Search Form */}
+          <div className="p-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {/* Check-in Date */}
+              <div>
+                <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                  Check-In Date
+                </label>
+                <input
+                  type="date"
+                  value={searchData.checkIn}
+                  onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
+                  min={new Date().toISOString().split('T')[0]}
+                  placeholder="Add Date"
+                  className="w-full px-4 py-4 bg-neutral-50 rounded-lg text-neutral-900 border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
+                />
+              </div>
 
-          {/* Subheadline - Gray/White Text */}
-          <p className="text-lg sm:text-xl md:text-2xl text-white/95 mb-20 max-w-3xl mx-auto leading-relaxed font-light drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
-            Book unique stays powered by AI - your gateway to personalized luxury and seamless hospitality
-          </p>
+              {/* Check-out Date */}
+              <div>
+                <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                  Check-Out Date
+                </label>
+                <input
+                  type="date"
+                  value={searchData.checkOut}
+                  onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
+                  min={searchData.checkIn || new Date().toISOString().split('T')[0]}
+                  placeholder="Add Date"
+                  className="w-full px-4 py-4 bg-neutral-50 rounded-lg text-neutral-900 border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
+                />
+              </div>
 
-          {/* Search Widget - Glassmorphism */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 22, delay: 0.5 }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="bg-white/10 backdrop-blur-2xl rounded-[2rem] p-4 border border-white/30 shadow-[0_24px_80px_rgba(0,0,0,0.5),_0_0_0_1px_rgba(255,255,255,0.1)_inset]">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {/* Check-in Date */}
-                <div className="relative group">
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 px-6 pt-2">Check-in</label>
-                  <input
-                    type="date"
-                    value={searchData.checkIn}
-                    onChange={(e) => setSearchData({ ...searchData, checkIn: e.target.value })}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-6 py-4 bg-white/5 hover:bg-white/15 rounded-[1.25rem] transition-all duration-300 text-white placeholder-white/50 border border-white/20 focus:border-white/50 focus:bg-white/20 focus:outline-none focus:shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
-                  />
-                </div>
-
-                {/* Check-out Date */}
-                <div className="relative group">
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 px-6 pt-2">Check-out</label>
-                  <input
-                    type="date"
-                    value={searchData.checkOut}
-                    onChange={(e) => setSearchData({ ...searchData, checkOut: e.target.value })}
-                    min={searchData.checkIn || new Date().toISOString().split('T')[0]}
-                    className="w-full px-6 py-4 bg-white/5 hover:bg-white/15 rounded-[1.25rem] transition-all duration-300 text-white placeholder-white/50 border border-white/20 focus:border-white/50 focus:bg-white/20 focus:outline-none focus:shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
-                  />
-                </div>
-
-                {/* Guests Dropdown */}
-                <div className="relative group">
-                  <label className="block text-xs font-medium text-white/70 mb-1.5 px-6 pt-2">Guests</label>
-                  <button
-                    type="button"
-                    onClick={() => setShowGuestsDropdown(!showGuestsDropdown)}
-                    className="w-full px-6 py-4 text-left bg-white/5 hover:bg-white/15 rounded-[1.25rem] transition-all duration-300 border border-white/20 focus:border-white/50 focus:bg-white/20 focus:outline-none focus:shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Users className="w-5 h-5 text-white/80" />
-                        <div className="text-white font-medium">
-                          {searchData.adults + searchData.children} {searchData.adults + searchData.children === 1 ? 'guest' : 'guests'}
-                        </div>
-                      </div>
-                      <ChevronDown className={`w-5 h-5 text-white/80 transition-transform duration-300 ${showGuestsDropdown ? 'rotate-180' : ''}`} />
-                    </div>
-                  </button>
+              {/* Guests Dropdown */}
+              <div className="relative">
+                <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                  Travelers & Class
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowGuestsDropdown(!showGuestsDropdown)}
+                  className="w-full px-4 py-4 text-left bg-neutral-50 rounded-lg border border-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-neutral-900">
+                      {searchData.adults + searchData.children} {searchData.adults + searchData.children === 1 ? 'Guest' : 'Guests'}
+                    </span>
+                    <ChevronDown className={`w-5 h-5 text-neutral-600 transition-transform duration-300 ${showGuestsDropdown ? 'rotate-180' : ''}`} />
+                  </div>
+                </button>
 
                   {/* Guests Dropdown Menu */}
                   {showGuestsDropdown && (
@@ -122,7 +130,7 @@ export function HeroSection() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 350, damping: 28 }}
-                        className="absolute top-full left-0 right-0 mt-3 bg-white rounded-[1.5rem] shadow-[0_24px_48px_rgba(0,0,0,0.2),_0_0_0_1px_rgba(0,0,0,0.05)] border border-neutral-200/50 p-6 z-20"
+                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-[0_20px_48px_rgba(0,0,0,0.15)] border border-neutral-200 p-6 z-20"
                       >
                         {/* Adults */}
                         <div className="flex items-center justify-between mb-5 pb-5 border-b border-neutral-200">
@@ -137,7 +145,7 @@ export function HeroSection() {
                               disabled={searchData.adults <= 1}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                             >
                               <Minus className="w-4 h-4 text-neutral-700" />
                             </motion.button>
@@ -149,7 +157,7 @@ export function HeroSection() {
                               onClick={() => setSearchData({ ...searchData, adults: searchData.adults + 1 })}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 transition-all duration-200"
+                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-all duration-200"
                             >
                               <Plus className="w-4 h-4 text-neutral-700" />
                             </motion.button>
@@ -169,7 +177,7 @@ export function HeroSection() {
                               disabled={searchData.children <= 0}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                             >
                               <Minus className="w-4 h-4 text-neutral-700" />
                             </motion.button>
@@ -181,28 +189,27 @@ export function HeroSection() {
                               onClick={() => setSearchData({ ...searchData, children: searchData.children + 1 })}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-primary-500 hover:bg-primary-50 transition-all duration-200"
+                              className="w-9 h-9 rounded-full border-2 border-neutral-300 flex items-center justify-center hover:border-orange-500 hover:bg-orange-50 transition-all duration-200"
                             >
                               <Plus className="w-4 h-4 text-neutral-700" />
                             </motion.button>
                           </div>
                         </div>
 
-                        <motion.button
+                      <button
                           onClick={() => setShowGuestsDropdown(false)}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="w-full py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-[1rem] hover:from-primary-700 hover:to-primary-800 transition-all duration-300 shadow-[0_8px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_28px_rgba(0,0,0,0.2)]"
+                        className="w-full py-3 bg-primary-500 text-white font-semibold rounded-xl hover:bg-primary-600 transition-all duration-300"
                         >
                           Done
-                        </motion.button>
+                      </button>
                       </motion.div>
                     </>
                   )}
-                </div>
+              </div>
 
-                {/* Explore Button - White */}
-                <motion.button
+              {/* Search Button */}
+              <div className="flex items-end">
+                <button
                   onClick={() => {
                     const params = new URLSearchParams();
                     if (searchData.checkIn) params.set('checkIn', searchData.checkIn);
@@ -211,26 +218,14 @@ export function HeroSection() {
                     params.set('children', searchData.children.toString());
                     navigate(`/rooms?${params.toString()}`);
                   }}
-                  className="px-10 py-5 bg-gradient-to-br from-white to-neutral-50 hover:from-neutral-50 hover:to-white text-neutral-900 font-bold text-lg rounded-[1.25rem] transition-all duration-300 flex items-center justify-center gap-2 mt-auto shadow-[0_12px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.5)] border border-white/50"
-                  whileHover={{ scale: 1.06, y: -2 }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                  className="w-full px-8 py-5 bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                 >
-                  Explore
-                </motion.button>
+                  <Search className="w-5 h-5" />
+                  Search Hotels
+                </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator (Optional) */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1, repeat: Infinity, repeatType: 'reverse' }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
-        >
-          <ChevronDown className="w-8 h-8 text-white/70" />
+          </div>
         </motion.div>
       </div>
     </section>

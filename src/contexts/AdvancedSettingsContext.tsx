@@ -118,7 +118,7 @@ Booking Details:
 - Check-in: {{checkInDate}}
 - Check-out: {{checkOutDate}}
 - Room Type: {{roomType}}
-- Total Amount: ${{totalAmount}}
+- Total Amount: $${'{{totalAmount}}'}
 
 We look forward to welcoming you!
 
@@ -161,7 +161,7 @@ Your booking has been cancelled as requested.
 Cancelled Booking Details:
 - Booking Number: {{bookingNumber}}
 - Original Check-in: {{checkInDate}}
-- Refund Amount: ${{refundAmount}}
+- Refund Amount: $${'{{refundAmount}}'}
 
 {{refundMessage}}
 

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { X, Home, Bed, Sparkles, ClipboardCheck, Mail, Calendar, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import logo from '@/assets/logo.png';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -79,7 +80,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {/* Header */}
             <div className="sticky top-0 bg-white border-b border-neutral-200 p-6 flex items-center justify-between z-10">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-primary-600" />
+                <img
+                  src={logo}
+                  alt="Glimmora"
+                  className="h-6 w-auto"
+                />
                 <span className="text-xl font-bold text-neutral-900">Glimmora</span>
               </div>
               <button

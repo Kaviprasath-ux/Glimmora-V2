@@ -30,46 +30,30 @@ export function PreferencesTab() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
-      >
-        <h2 className="text-3xl font-bold text-neutral-900 mb-2">Room Preferences</h2>
-        <p className="text-neutral-600">
-          Set your preferences for a personalized stay experience
-        </p>
-      </motion.div>
-
+    <div className="max-w-4xl space-y-6">
       {/* Room Preferences */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Bed className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Room Setup</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-6">Room Setup</h3>
 
-        <div className="space-y-6">
+        <div className="space-y-5">
           {/* Floor Preference */}
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Floor Preference
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {['low', 'mid', 'high'].map((floor) => (
                 <button
                   key={floor}
                   onClick={() => setPreferences({ ...preferences, floor })}
-                  className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                     preferences.floor === floor
                       ? 'bg-primary-600 text-white'
-                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                      : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
                   }`}
                 >
                   {floor.charAt(0).toUpperCase() + floor.slice(1)} Floor
@@ -80,18 +64,18 @@ export function PreferencesTab() {
 
           {/* View Preference */}
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               View Preference
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {['ocean', 'city', 'garden'].map((view) => (
                 <button
                   key={view}
                   onClick={() => setPreferences({ ...preferences, view })}
-                  className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                     preferences.view === view
                       ? 'bg-primary-600 text-white'
-                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                      : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
                   }`}
                 >
                   {view.charAt(0).toUpperCase() + view.slice(1)} View
@@ -102,18 +86,18 @@ export function PreferencesTab() {
 
           {/* Bed Type */}
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Bed Type
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {['king', 'queen', 'twin'].map((bed) => (
                 <button
                   key={bed}
                   onClick={() => setPreferences({ ...preferences, bedType: bed })}
-                  className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                     preferences.bedType === bed
                       ? 'bg-primary-600 text-white'
-                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                      : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
                   }`}
                 >
                   {bed.charAt(0).toUpperCase() + bed.slice(1)} Bed
@@ -124,18 +108,18 @@ export function PreferencesTab() {
 
           {/* Quietness */}
           <div>
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Room Location
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {['quiet', 'lively'].map((location) => (
                 <button
                   key={location}
                   onClick={() => setPreferences({ ...preferences, quietness: location })}
-                  className={`py-3 px-4 rounded-xl font-medium transition-all ${
+                  className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                     preferences.quietness === location
                       ? 'bg-primary-600 text-white'
-                      : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                      : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
                   }`}
                 >
                   {location.charAt(0).toUpperCase() + location.slice(1)} Area
@@ -150,18 +134,15 @@ export function PreferencesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.1 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Thermometer className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Room Temperature</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-6">Room Temperature</h3>
 
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-neutral-700">Preferred Temperature</span>
-            <span className="text-3xl font-bold text-primary-600">{preferences.temperature}°F</span>
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm text-neutral-700">Preferred Temperature</span>
+            <span className="text-2xl font-bold text-neutral-900">{preferences.temperature}°F</span>
           </div>
           <input
             type="range"
@@ -171,7 +152,7 @@ export function PreferencesTab() {
             onChange={(e) => setPreferences({ ...preferences, temperature: parseInt(e.target.value) })}
             className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
           />
-          <div className="flex justify-between text-sm text-neutral-600 mt-2">
+          <div className="flex justify-between text-xs text-neutral-500 mt-2">
             <span>Cool (65°F)</span>
             <span>Warm (78°F)</span>
           </div>
@@ -182,23 +163,20 @@ export function PreferencesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.15 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Bed className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Pillow Type</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Pillow Type</h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {['firm', 'soft', 'memory-foam', 'feather'].map((pillow) => (
             <button
               key={pillow}
               onClick={() => toggleArrayItem('pillowType', pillow)}
-              className={`py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                 preferences.pillowType.includes(pillow)
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
               }`}
             >
               {pillow.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
@@ -211,23 +189,20 @@ export function PreferencesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.2 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <Coffee className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Minibar Preferences</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Minibar Preferences</h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {['water', 'soft-drinks', 'energy-drinks', 'snacks', 'beer', 'wine'].map((item) => (
             <button
               key={item}
               onClick={() => toggleArrayItem('minibar', item)}
-              className={`py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                 preferences.minibar.includes(item)
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
               }`}
             >
               {item.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
@@ -240,23 +215,20 @@ export function PreferencesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="bg-white rounded-2xl p-8 shadow-sm"
+        transition={{ delay: 0.25 }}
+        className="border border-neutral-200 rounded-xl p-6 bg-white"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <UtensilsCrossed className="w-6 h-6 text-primary-600" />
-          <h3 className="text-xl font-bold text-neutral-900">Dietary Restrictions</h3>
-        </div>
+        <h3 className="text-lg font-semibold text-neutral-900 mb-4">Dietary Restrictions</h3>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {['vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'nut-free', 'halal'].map((diet) => (
             <button
               key={diet}
               onClick={() => toggleArrayItem('dietary', diet)}
-              className={`py-3 px-4 rounded-xl font-medium transition-all ${
+              className={`py-2 px-4 rounded-lg font-medium transition-colors text-sm ${
                 preferences.dietary.includes(diet)
                   ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  : 'bg-white border border-neutral-300 text-neutral-700 hover:border-neutral-400'
               }`}
             >
               {diet.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
@@ -269,13 +241,14 @@ export function PreferencesTab() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
+        transition={{ delay: 0.3 }}
+        className="flex justify-end"
       >
         <button
           onClick={handleSave}
-          className="w-full md:w-auto px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2"
+          className="px-6 py-2.5 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2 text-sm"
         >
-          <Save className="w-5 h-5" />
+          <Save className="w-4 h-4" />
           Save Preferences
         </button>
       </motion.div>
